@@ -5,442 +5,319 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мій Словник</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Tailwind gray-100 */
-        }
-        
-        /* CSS для 3D перевертання картки */
-        .perspective {
-            perspective: 1000px;
-        }
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-            transform-style: preserve-3d;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            border-radius: 1rem;
-        }
-        .is-flipped .flip-card-inner {
-            transform: rotateX(180deg);
-        }
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            border-radius: 1rem;
-            padding: 2rem;
-        }
-        .flip-card-front {
-            background-color: white;
-            color: #1f2937; /* gray-800 */
-        }
-        .flip-card-back {
-            background-color: #3b82f6; /* blue-500 */
-            color: white;
-            transform: rotateX(180deg);
-        }
-
-        /* Кастомний скроллбар */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
+        /* 3D Flip ефект для карток */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.5s; }
+        .flipped .card-inner { transform: rotateY(180deg); }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="bg-gray-100 min-h-screen font-sans text-gray-800">
 
-    <!-- Головний контейнер -->
-    <main class="flex-grow max-w-5xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        
-        <!-- Шапка -->
-        <header class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 tracking-tight">📚 Мій Словник</h1>
-                <p class="text-gray-500 mt-1">Зберігай нові слова та вивчай їх за допомогою карток</p>
-            </div>
-            <button onclick="openReviewModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-xl shadow-md transition-colors flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                </svg>
-                Повторити слова
-            </button>
-        </header>
+    <div class="max-w-2xl mx-auto p-4 pt-10">
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-600">Мій Словник</h1>
 
-        <!-- Форма додавання -->
-        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-            <h2 class="text-lg font-semibold mb-4 text-gray-800">Додати нове слово</h2>
-            <form id="addWordForm" class="flex flex-col md:flex-row gap-4">
-                <div class="flex-1">
-                    <label for="wordInput" class="sr-only">Слово</label>
-                    <input type="text" id="wordInput" required placeholder="Слово (напр. Warehouse)" 
-                           class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3 transition-colors">
-                </div>
-                <div class="flex-1">
-                    <label for="transcriptionInput" class="sr-only">Транскрипція</label>
-                    <input type="text" id="transcriptionInput" placeholder="Транскр. (напр. [ˈweəhaʊs])" 
-                           class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3 transition-colors">
-                </div>
-                <div class="flex-1">
-                    <label for="translationInput" class="sr-only">Переклад</label>
-                    <input type="text" id="translationInput" required placeholder="Переклад (напр. Склад)" 
-                           class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3 transition-colors">
-                </div>
-                <button type="submit" class="bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-8 rounded-xl transition-colors md:w-auto w-full">
-                    Додати
+        <!-- Форма додавання слова -->
+        <div class="bg-white p-6 rounded-2xl shadow-md mb-8">
+            <h2 class="text-xl font-semibold mb-4">Додати нове слово</h2>
+            <form id="add-word-form" class="flex flex-col gap-4">
+                <input type="text" id="eng-input" placeholder="Англійською (напр. Warehouse)" required
+                    class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                
+                <input type="text" id="trans-input" placeholder="Транскрипція (необов'язково)"
+                    class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                
+                <input type="text" id="ukr-input" placeholder="Українською (напр. Склад)" required
+                    class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                
+                <button type="submit" id="submit-btn"
+                    class="bg-blue-600 text-white font-semibold p-3 rounded-lg hover:bg-blue-700 transition">
+                    Додати слово
                 </button>
             </form>
-        </section>
-
-        <!-- Список слів -->
-        <section>
-            <div class="flex justify-between items-end mb-4">
-                <h2 class="text-xl font-bold text-gray-800">Список слів <span id="wordCount" class="text-sm font-normal text-gray-500 bg-gray-200 px-2 py-1 rounded-full ml-2">0</span></h2>
-            </div>
-            
-            <div id="wordsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- Картки слів генеруються тут -->
-            </div>
-            
-            <!-- Порожній стан -->
-            <div id="emptyState" class="hidden text-center py-12 bg-white rounded-2xl border border-gray-100 border-dashed mt-4">
-                <span class="text-4xl mb-3 block">📭</span>
-                <h3 class="text-lg font-medium text-gray-900">Словник порожній</h3>
-                <p class="text-gray-500 mt-1">Додайте свої перші слова за допомогою форми вище.</p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Модальне вікно для повторення (Флеш-картки) -->
-    <div id="reviewModal" class="fixed inset-0 z-50 hidden bg-gray-900/90 backdrop-blur-sm flex flex-col justify-center items-center p-4">
-        
-        <!-- Кнопка закрити -->
-        <button onclick="closeReviewModal()" class="absolute top-4 right-4 sm:top-8 sm:right-8 text-white hover:text-gray-300 transition-colors p-2 bg-white/10 rounded-full hover:bg-white/20">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-
-        <!-- Контент модалки -->
-        <div id="flashcardContainer" class="w-full max-w-2xl flex flex-col items-center">
-            
-            <div class="text-white/70 mb-4 font-medium tracking-widest text-sm uppercase">
-                Картка <span id="currentCardNum">1</span> з <span id="totalCardsNum">10</span>
-            </div>
-
-            <!-- Сама флеш-картка (3D контейнер) -->
-            <div class="perspective w-full aspect-[4/3] max-h-[60vh] cursor-pointer group" onclick="toggleCardFlip()" id="flashcard">
-                <div class="flip-card-inner" id="flashcardInner">
-                    
-                    <!-- Передня частина (Слово) -->
-                    <div class="flip-card-front">
-                        <span class="text-sm text-gray-400 mb-2 font-medium uppercase tracking-wider">Слово</span>
-                        <h2 id="cardWord" class="text-4xl sm:text-5xl md:text-6xl font-bold text-center break-words w-full px-4">Warehouse</h2>
-                        <p id="cardTranscription" class="text-xl sm:text-2xl text-gray-500 mt-2 font-light tracking-wide">[ˈweəhaʊs]</p>
-                        <div class="absolute bottom-6 text-gray-400 text-sm flex items-center gap-1 animate-pulse">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>
-                            Натисніть, щоб перевернути
-                        </div>
-                    </div>
-                    
-                    <!-- Задня частина (Переклад) -->
-                    <div class="flip-card-back">
-                        <span class="text-sm text-blue-200 mb-2 font-medium uppercase tracking-wider">Переклад</span>
-                        <h2 id="cardTranslation" class="text-4xl sm:text-5xl md:text-6xl font-bold text-center break-words w-full px-4">Склад</h2>
-                    </div>
-                
-                </div>
-            </div>
-
-            <!-- Контроли -->
-            <div class="flex items-center gap-4 sm:gap-8 mt-10">
-                <button onclick="prevCard()" id="btnPrev" class="bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-                
-                <button onclick="nextCard()" id="btnNext" class="bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-            </div>
-            
-            <p class="text-white/50 text-sm mt-6 hidden sm:block">Також можна використовувати стрілки ⬅️ та ➡️ на клавіатурі</p>
-
         </div>
-    </div>
 
-    <!-- Модальне вікно для повідомлень (замість alert) -->
-    <div id="messageModal" class="fixed inset-0 z-[60] hidden bg-gray-900/50 backdrop-blur-sm flex justify-center items-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center transform scale-95 transition-transform" id="messageBox">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
-                <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2" id="messageTitle">Увага</h3>
-            <p class="text-sm text-gray-500 mb-6" id="messageText">Повідомлення</p>
-            <button onclick="closeMessage()" class="w-full inline-flex justify-center rounded-xl border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none sm:text-sm transition-colors">
-                Зрозуміло
+        <!-- Кнопка тренування -->
+        <div class="flex justify-center mb-8">
+            <button id="practice-btn" class="bg-green-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-105">
+                Повторити слова
             </button>
         </div>
+
+        <!-- Список слів -->
+        <div class="bg-white p-6 rounded-2xl shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Мій список (<span id="word-count">0</span>)</h2>
+            <div id="loading-msg" class="text-gray-500 mb-4">Завантаження слів із бази даних...</div>
+            <ul id="word-list" class="flex flex-col gap-3">
+                <!-- Слова будуть додаватися сюди через JS -->
+            </ul>
+        </div>
     </div>
 
-    <script>
-        // --- Стан додатку ---
-        const STORAGE_KEY = 'my_ukrainian_dictionary';
-        let dictionary = [];
-        let currentCardIndex = 0;
-        let reviewList = [];
-
-        // Дефолтні слова для прикладу
-        const defaultWords = [
-            { id: Date.now().toString(), word: 'Warehouse', transcription: '[ˈweəhaʊs]', translation: 'Склад' },
-            { id: (Date.now() + 1).toString(), word: 'Hello', transcription: '[həˈləʊ]', translation: 'Привіт' },
-            { id: (Date.now() + 2).toString(), word: 'Apple', transcription: '[ˈæpl]', translation: 'Яблуко' },
-            { id: (Date.now() + 3).toString(), word: 'Sun', transcription: '[sʌn]', translation: 'Сонце' }
-        ];
-
-        // --- Елементи DOM ---
-        const form = document.getElementById('addWordForm');
-        const wordInput = document.getElementById('wordInput');
-        const transcriptionInput = document.getElementById('transcriptionInput');
-        const translationInput = document.getElementById('translationInput');
-        const wordsGrid = document.getElementById('wordsGrid');
-        const emptyState = document.getElementById('emptyState');
-        const wordCount = document.getElementById('wordCount');
+    <!-- Модальне вікно для карток -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 hidden flex-col justify-center items-center p-4 z-50">
+        <button id="close-modal" class="absolute top-6 right-6 text-white text-4xl hover:text-gray-300">&times;</button>
         
-        // Модалка флеш-карток
-        const reviewModal = document.getElementById('reviewModal');
-        const flashcardInner = document.getElementById('flashcardInner');
-        const cardWord = document.getElementById('cardWord');
-        const cardTranscription = document.getElementById('cardTranscription');
-        const cardTranslation = document.getElementById('cardTranslation');
-        const currentCardNum = document.getElementById('currentCardNum');
-        const totalCardsNum = document.getElementById('totalCardsNum');
-        const btnPrev = document.getElementById('btnPrev');
-        const btnNext = document.getElementById('btnNext');
+        <div class="text-white mb-4 text-lg">Картка <span id="current-card-num">1</span> з <span id="total-cards-num">10</span></div>
 
-        // Модалка повідомлень
-        const messageModal = document.getElementById('messageModal');
-        const messageTitle = document.getElementById('messageTitle');
-        const messageText = document.getElementById('messageText');
-
-        // --- Ініціалізація ---
-        function init() {
-            const savedData = localStorage.getItem(STORAGE_KEY);
-            if (savedData) {
-                try {
-                    dictionary = JSON.parse(savedData);
-                } catch (e) {
-                    console.error("Помилка читання з LocalStorage", e);
-                    dictionary = [...defaultWords];
-                }
-            } else {
-                // Якщо порожньо, додаємо дефолтні слова
-                dictionary = [...defaultWords];
-                saveData();
-            }
-            renderList();
-        }
-
-        // --- Основні функції ---
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(dictionary));
-        }
-
-        function renderList() {
-            wordsGrid.innerHTML = '';
-            wordCount.innerText = dictionary.length;
-            
-            if (dictionary.length === 0) {
-                wordsGrid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-            } else {
-                wordsGrid.classList.remove('hidden');
-                emptyState.classList.add('hidden');
+        <!-- Сама флеш-картка -->
+        <div id="flashcard" class="w-full max-w-sm h-64 perspective-1000 cursor-pointer">
+            <div class="card-inner relative w-full h-full transform-style-3d">
                 
-                // Створюємо картку для кожного слова (виводимо нові зверху)
-                const reversedDict = [...dictionary].reverse();
+                <!-- Передня сторона (Англійська) -->
+                <div class="absolute w-full h-full backface-hidden bg-white rounded-2xl shadow-2xl flex flex-col justify-center items-center p-6 text-center">
+                    <span class="text-4xl font-bold text-gray-800" id="card-eng"></span>
+                    <span class="text-xl text-blue-500 mt-3 font-mono" id="card-trans"></span>
+                    <span class="text-sm text-gray-400 mt-6">(Натисни, щоб перевернути)</span>
+                </div>
                 
-                reversedDict.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow relative flex flex-col justify-between';
-                    
-                    const transText = item.transcription ? `<span class="text-blue-500 font-medium text-base font-normal">${item.transcription}</span>` : '';
-                    
-                    card.innerHTML = `
-                        <div>
-                            <h3 class="font-bold text-lg text-gray-900 break-words flex items-center flex-wrap gap-2">
-                                <button onclick="deleteWord('${item.id}')" class="text-red-500 hover:text-red-700 transition-colors flex-shrink-0 bg-red-50 hover:bg-red-100 p-1.5 rounded-md" title="Видалити">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                                <span>${item.word}</span> 
-                                ${transText}
-                            </h3>
-                            <p class="text-gray-600 mt-2 break-words pl-[2.25rem]">${item.translation}</p>
-                        </div>
-                    `;
-                    wordsGrid.appendChild(card);
+                <!-- Задня сторона (Українська) -->
+                <div class="absolute w-full h-full backface-hidden bg-blue-600 rounded-2xl shadow-2xl flex flex-col justify-center items-center p-6 text-center rotate-y-180">
+                    <span class="text-4xl font-bold text-white" id="card-ukr"></span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Керування картками -->
+        <div class="flex gap-6 mt-8">
+            <button id="prev-btn" class="bg-white text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition">Назад</button>
+            <button id="next-btn" class="bg-white text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition">Вперед</button>
+        </div>
+    </div>
+
+    <!-- Firebase та Логіка -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, orderBy, query } 
+            from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtcJLMY9jIiKpOCK-qR3euD3ToUoH5AWY",
+            authDomain: "dictionary-4d165.firebaseapp.com",
+            projectId: "dictionary-4d165",
+            storageBucket: "dictionary-4d165.firebasestorage.app",
+            messagingSenderId: "619512208362",
+            appId: "1:619512208362:web:f3990b11cea9d9432df093"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let words = [];
+        let practiceWords = [];
+        let currentCardIndex = 0;
+
+        // Елементи DOM
+        const form = document.getElementById('add-word-form');
+        const engInput = document.getElementById('eng-input');
+        const transInput = document.getElementById('trans-input');
+        const ukrInput = document.getElementById('ukr-input');
+        const wordList = document.getElementById('word-list');
+        const wordCount = document.getElementById('word-count');
+        const loadingMsg = document.getElementById('loading-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Модальне вікно
+        const modal = document.getElementById('modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const practiceBtn = document.getElementById('practice-btn');
+        const flashcard = document.getElementById('flashcard');
+        const cardEng = document.getElementById('card-eng');
+        const cardTrans = document.getElementById('card-trans');
+        const cardUkr = document.getElementById('card-ukr');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentNum = document.getElementById('current-card-num');
+        const totalNum = document.getElementById('total-cards-num');
+
+        // Завантаження слів із бази даних Firestore
+        async function loadWords() {
+            words = [];
+            try {
+                const q = query(collection(db, "words"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    words.push({ id: doc.id, ...doc.data() });
                 });
-            }
-        }
-
-        function addWord(e) {
-            e.preventDefault();
-            const word = wordInput.value.trim();
-            const transcription = transcriptionInput.value.trim();
-            const translation = translationInput.value.trim();
-
-            if (word && translation) {
-                const newWord = {
-                    id: Date.now().toString(),
-                    word: word,
-                    transcription: transcription ? (transcription.startsWith('[') ? transcription : `[${transcription}]`) : '',
-                    translation: translation
-                };
-                
-                dictionary.push(newWord);
-                saveData();
+                loadingMsg.style.display = 'none';
                 renderList();
-                
-                // Очистка форми
-                form.reset();
-                wordInput.focus();
+            } catch (error) {
+                console.error("Помилка завантаження:", error);
+                loadingMsg.innerText = "Помилка завантаження. Перевір налаштування Firestore (Test mode).";
             }
         }
 
-        function deleteWord(id) {
-            dictionary = dictionary.filter(item => item.id !== id);
-            saveData();
-            renderList();
-        }
+        // Відображення списку слів
+        function renderList() {
+            wordList.innerHTML = '';
+            wordCount.innerText = words.length;
 
-        // --- Логіка Флеш-карток ---
-        function openReviewModal() {
-            if (dictionary.length === 0) {
-                showMessage("Словник порожній", "Спочатку додайте хоча б одне слово, щоб почати повторення.");
+            if (words.length === 0) {
+                wordList.innerHTML = '<li class="text-gray-400 text-center py-4">Словник порожній. Додай перше слово!</li>';
                 return;
             }
-            
-            // Перемішати масив для повторення (Fisher-Yates)
-            reviewList = [...dictionary];
-            for (let i = reviewList.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [reviewList[i], reviewList[j]] = [reviewList[j], reviewList[i]];
-            }
 
+            words.forEach((word) => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200';
+                
+                const transcriptionHtml = word.transcription ? `<span class="text-blue-500 font-mono text-sm ml-2">[${word.transcription}]</span>` : '';
+                
+                li.innerHTML = `
+                    <div class="flex items-center">
+                        <button class="delete-btn bg-red-100 hover:bg-red-200 text-red-500 p-2 rounded-md transition mr-3" data-id="${word.id}" title="Видалити">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                        <div>
+                            <span class="font-bold text-lg">${word.english}</span>
+                            ${transcriptionHtml}
+                            <div class="text-gray-600 pl-[3.2rem] -mt-1">${word.ukrainian}</div>
+                        </div>
+                    </div>
+                `;
+                wordList.appendChild(li);
+            });
+
+            // Додаємо подію видалення
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    await deleteWordFromDB(id);
+                });
+            });
+        }
+
+        // Додавання слова
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const eng = engInput.value.trim();
+            let trans = transInput.value.trim();
+            const ukr = ukrInput.value.trim();
+
+            if (trans && !trans.startsWith('[')) trans = '[' + trans;
+            if (trans && !trans.endsWith(']')) trans = trans + ']';
+            trans = trans.replace(/\[|\]/g, ''); // Зберігаємо чистий текст, дужки підставляє код
+
+            submitBtn.innerText = 'Додаю...';
+            submitBtn.disabled = true;
+
+            try {
+                const docRef = await addDoc(collection(db, "words"), {
+                    english: eng,
+                    transcription: trans,
+                    ukrainian: ukr,
+                    createdAt: serverTimestamp()
+                });
+                
+                words.unshift({ id: docRef.id, english: eng, transcription: trans, ukrainian: ukr });
+                renderList();
+                
+                engInput.value = '';
+                transInput.value = '';
+                ukrInput.value = '';
+            } catch (error) {
+                console.error("Помилка збереження:", error);
+                alert("Помилка збереження. Перевір правила бази даних (Firestore).");
+            } finally {
+                submitBtn.innerText = 'Додати слово';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Видалення слова
+        async function deleteWordFromDB(id) {
+            try {
+                await deleteDoc(doc(db, "words", id));
+                words = words.filter(w => w.id !== id);
+                renderList();
+            } catch (error) {
+                console.error("Помилка видалення:", error);
+            }
+        }
+
+        // --- ЛОГІКА ФЛЕШ-КАРТОК --- //
+        
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        practiceBtn.addEventListener('click', () => {
+            if (words.length === 0) {
+                alert("Спершу додай слова до словника!");
+                return;
+            }
+            practiceWords = shuffleArray([...words]);
             currentCardIndex = 0;
-            updateFlashcardUI();
+            updateCard();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            flashcard.classList.remove('flipped');
+        });
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        function updateCard() {
+            flashcard.classList.remove('flipped');
+            const word = practiceWords[currentCardIndex];
             
-            // Показуємо модалку
-            reviewModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Вимикаємо скролл тіла
+            setTimeout(() => {
+                cardEng.innerText = word.english;
+                cardTrans.innerText = word.transcription ? `[${word.transcription}]` : '';
+                cardUkr.innerText = word.ukrainian;
+                currentNum.innerText = currentCardIndex + 1;
+                totalNum.innerText = practiceWords.length;
+            }, 150);
         }
 
-        function closeReviewModal() {
-            reviewModal.classList.add('hidden');
-            document.body.style.overflow = '';
-            // Скидаємо поворот при закритті
-            flashcardInner.parentElement.classList.remove('is-flipped');
-        }
-
-        function updateFlashcardUI() {
-            // Скидаємо поворот карти при зміні
-            const cardEl = flashcardInner.parentElement;
-            if (cardEl.classList.contains('is-flipped')) {
-                cardEl.classList.remove('is-flipped');
-                // Даємо час анімації завершитись (опціонально, але краще без затримки для UX)
-            }
-
-            const currentItem = reviewList[currentCardIndex];
-            cardWord.innerText = currentItem.word;
-            cardTranscription.innerText = currentItem.transcription || '';
-            cardTranslation.innerText = currentItem.translation;
-            
-            currentCardNum.innerText = currentCardIndex + 1;
-            totalCardsNum.innerText = reviewList.length;
-
-            // Стан кнопок
-            btnPrev.disabled = currentCardIndex === 0;
-            btnNext.disabled = currentCardIndex === reviewList.length - 1;
-        }
-
-        function toggleCardFlip() {
-            flashcardInner.parentElement.classList.toggle('is-flipped');
-        }
-
-        function nextCard() {
-            if (currentCardIndex < reviewList.length - 1) {
+        nextBtn.addEventListener('click', () => {
+            if (currentCardIndex < practiceWords.length - 1) {
                 currentCardIndex++;
-                updateFlashcardUI();
+                updateCard();
             }
-        }
+        });
 
-        function prevCard() {
+        prevBtn.addEventListener('click', () => {
             if (currentCardIndex > 0) {
                 currentCardIndex--;
-                updateFlashcardUI();
+                updateCard();
             }
-        }
+        });
 
-        // --- Кастомний Alert (Повідомлення) ---
-        function showMessage(title, text) {
-            messageTitle.innerText = title;
-            messageText.innerText = text;
-            messageModal.classList.remove('hidden');
-        }
-
-        function closeMessage() {
-            messageModal.classList.add('hidden');
-        }
-
-        // --- Event Listeners ---
-        form.addEventListener('submit', addWord);
-
-        // Клавіатура для флеш-карток
         document.addEventListener('keydown', (e) => {
-            if (!reviewModal.classList.contains('hidden')) {
-                if (e.key === 'ArrowRight') nextCard();
-                if (e.key === 'ArrowLeft') prevCard();
-                if (e.key === 'Escape') closeReviewModal();
+            if (!modal.classList.contains('hidden')) {
+                if (e.key === 'ArrowRight') nextBtn.click();
+                if (e.key === 'ArrowLeft') prevBtn.click();
                 if (e.key === ' ' || e.key === 'Enter') {
-                    // Пробіл або Enter перевертають картку
                     e.preventDefault();
-                    toggleCardFlip();
+                    flashcard.click();
                 }
-            } else if (!messageModal.classList.contains('hidden')) {
-                if (e.key === 'Escape' || e.key === 'Enter') closeMessage();
+                if (e.key === 'Escape') closeModalBtn.click();
             }
         });
 
         // Запуск
-        init();
-
+        loadWords();
     </script>
 </body>
 </html>
