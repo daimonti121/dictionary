@@ -3,90 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мій Словник</title>
+    <title>CYBER_DICT // V1.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Моноширинный шрифт для эффекта терминала -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cyber: ['"Share Tech Mono"', 'monospace'],
+                    },
+                    colors: {
+                        neon: '#06b6d4', // Cyan-500
+                        darkbg: '#030712', // Gray-950
+                        panel: '#082f49', // Sky-900
+                    }
+                }
+            }
+        }
+    </script>
     <style>
+        /* Темный фон с кибер-сеткой */
+        body {
+            background-color: #030712;
+            background-image: 
+                linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        /* Эффект свечения для кнопок и панелей */
+        .neon-border {
+            box-shadow: 0 0 5px rgba(6, 182, 212, 0.3), inset 0 0 5px rgba(6, 182, 212, 0.1);
+        }
+        .neon-border:focus-within, .neon-border:hover {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.6), inset 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+
         /* 3D Flip ефект для карток */
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
-        .card-inner { transition: transform 0.5s; }
+        .card-inner { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .flipped .card-inner { transform: rotateY(180deg); }
+
+        /* Стилизация скроллбара */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; border-left: 1px solid #082f49; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen font-sans text-gray-800">
+<body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4">
 
-    <div class="max-w-2xl mx-auto p-4 pt-10">
-        <h1 class="text-3xl font-bold text-center mb-8 text-blue-600">Мій Словник</h1>
+    <!-- Декоративный хедер -->
+    <div class="w-full max-w-2xl flex justify-between items-end border-b-2 border-cyan-500 pb-2 mb-6">
+        <div>
+            <div class="text-xs text-cyan-700">SYS.ADMIN // ACCESS GRANTED</div>
+            <h1 class="text-3xl tracking-widest font-bold text-cyan-300">CYBER_DICT</h1>
+        </div>
+        <div class="text-right">
+            <div class="text-xs text-cyan-700">STATUS: ONLINE</div>
+            <div class="text-sm">ROOT@DATA:~#</div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-2xl flex flex-col gap-6">
 
         <!-- Форма додавання слова -->
-        <div class="bg-white p-6 rounded-2xl shadow-md mb-8">
-            <h2 class="text-xl font-semibold mb-4">Додати нове слово</h2>
+        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border">
+            <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-500"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 bg-cyan-500"></div>
+            
+            <h2 class="text-lg tracking-widest mb-4 uppercase text-cyan-200">> Инициализация новой записи</h2>
             <form id="add-word-form" class="flex flex-col gap-4">
-                <input type="text" id="eng-input" placeholder="Англійською (напр. Warehouse)" required
-                    class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="eng-input" placeholder="EN_DATA (e.g. Vulnerability)" required
+                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-300 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
-                <input type="text" id="trans-input" placeholder="Транскрипція (необов'язково)"
-                    class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="trans-input" placeholder="PHONETICS (optional)"
+                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-300 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
-                <input type="text" id="ukr-input" placeholder="Українською (напр. Склад)" required
-                    class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="ukr-input" placeholder="UA_DATA (e.g. Уразливість)" required
+                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-300 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
                 <button type="submit" id="submit-btn"
-                    class="bg-blue-600 text-white font-semibold p-3 rounded-lg hover:bg-blue-700 transition">
-                    Додати слово
+                    class="mt-2 bg-cyan-950 border-2 border-cyan-500 text-cyan-300 font-bold uppercase tracking-widest p-3 hover:bg-cyan-500 hover:text-black transition-all">
+                    [ Загрузить в базу ]
                 </button>
             </form>
         </div>
 
         <!-- Кнопка тренування -->
-        <div class="flex justify-center mb-8">
-            <button id="practice-btn" class="bg-green-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-105">
-                Повторити слова
+        <div class="flex justify-center my-2">
+            <button id="practice-btn" class="bg-black border-2 border-green-500 text-green-400 font-bold tracking-widest py-3 px-10 hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:shadow-[0_0_25px_rgba(34,197,94,0.6)] uppercase flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                Запуск симуляции
             </button>
         </div>
 
         <!-- Список слів -->
-        <div class="bg-white p-6 rounded-2xl shadow-md">
-            <h2 class="text-xl font-semibold mb-4">Мій список (<span id="word-count">0</span>)</h2>
-            <div id="loading-msg" class="text-gray-500 mb-4">Завантаження слів із бази даних...</div>
-            <ul id="word-list" class="flex flex-col gap-3">
+        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10">
+            <div class="flex justify-between items-center mb-4 border-b border-cyan-900 pb-2">
+                <h2 class="text-lg tracking-widest uppercase text-cyan-200">> База данных</h2>
+                <div class="text-sm text-cyan-600">RECORDS: <span id="word-count" class="text-cyan-300">0</span></div>
+            </div>
+            
+            <div id="loading-msg" class="text-cyan-700 animate-pulse">Установка соединения с сервером...</div>
+            
+            <ul id="word-list" class="flex flex-col gap-2">
                 <!-- Слова будуть додаватися сюди через JS -->
             </ul>
         </div>
     </div>
 
     <!-- Модальне вікно для карток -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 hidden flex-col justify-center items-center p-4 z-50">
-        <button id="close-modal" class="absolute top-6 right-6 text-white text-4xl hover:text-gray-300">&times;</button>
+    <div id="modal" class="fixed inset-0 bg-gray-950 bg-opacity-95 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-sm">
         
-        <!-- <div class="text-white mb-4 text-lg">Картка <span id="current-card-num">1</span> з <span id="total-cards-num">10</span></div> -->
+        <!-- Технічні елементи декору на фоні модалки -->
+        <div class="absolute top-4 left-4 text-xs text-cyan-800 pointer-events-none">SYSTEM OVERRIDE // ACTIVE</div>
+        <div class="absolute bottom-4 right-4 text-xs text-cyan-800 pointer-events-none">MEMORY SECTOR 7G</div>
+
+        <button id="close-modal" class="absolute top-6 right-6 text-cyan-500 text-4xl hover:text-cyan-300 hover:scale-110 transition-transform">&times;</button>
+        
+        <div class="text-cyan-500 mb-6 text-lg tracking-widest uppercase border-b border-cyan-800 pb-1">
+            Блок <span id="current-card-num" class="text-cyan-200">1</span> // <span id="total-cards-num" class="text-cyan-700">10</span>
+        </div>
 
         <!-- Сама флеш-картка -->
-        <div id="flashcard" class="w-full max-w-sm h-64 perspective-1000 cursor-pointer">
+        <div id="flashcard" class="w-full max-w-md h-72 perspective-1000 cursor-pointer relative">
             <div class="card-inner relative w-full h-full transform-style-3d">
                 
                 <!-- Передня сторона (Англійська) -->
-                <div class="absolute w-full h-full backface-hidden bg-white rounded-2xl shadow-2xl flex flex-col justify-center items-center p-6 text-center">
-                    <span class="text-4xl font-bold text-gray-800" id="card-eng"></span>
-                    <span class="text-xl text-blue-500 mt-3 font-mono" id="card-trans"></span>
-                    <span class="text-sm text-gray-400 mt-6">(Натисни, щоб перевернути)</span>
+                <div class="absolute w-full h-full backface-hidden bg-black border-2 border-cyan-500 flex flex-col justify-center items-center p-6 text-center neon-border">
+                    <div class="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
+                    <div class="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
+                    
+                    <span class="text-5xl font-bold text-cyan-100 tracking-wider" id="card-eng"></span>
+                    <span class="text-xl text-cyan-600 mt-4 font-mono" id="card-trans"></span>
+                    
+                    <div class="absolute bottom-6 w-full text-center">
+                        <span class="text-xs text-cyan-800 uppercase animate-pulse">[ Клик для дешифровки ]</span>
+                    </div>
                 </div>
                 
                 <!-- Задня сторона (Українська) -->
-                <div class="absolute w-full h-full backface-hidden bg-blue-600 rounded-2xl shadow-2xl flex flex-col justify-center items-center p-6 text-center rotate-y-180">
-                    <span class="text-4xl font-bold text-white" id="card-ukr"></span>
+                <div class="absolute w-full h-full backface-hidden bg-cyan-900 border-2 border-cyan-400 flex flex-col justify-center items-center p-6 text-center rotate-y-180 neon-border">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-cyan-400"></div>
+                    <span class="text-4xl font-bold text-black uppercase tracking-wider bg-cyan-400 px-4 py-2" id="card-ukr"></span>
                 </div>
 
             </div>
         </div>
 
         <!-- Керування картками -->
-        <div class="flex gap-4 mt-8">
-            <button id="prev-btn" class="bg-white text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition">Назад</button>
-            <button id="shuffle-btn" class="bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-500 transition">Перемешать</button>
-            <button id="next-btn" class="bg-white text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition">Вперед</button>
+        <div class="flex gap-4 mt-10">
+            <button id="prev-btn" class="bg-black border border-cyan-600 text-cyan-500 uppercase tracking-widest py-2 px-6 hover:bg-cyan-900 transition-colors"><< Назад</button>
+            <button id="shuffle-btn" class="bg-cyan-950 border border-yellow-500 text-yellow-500 uppercase tracking-widest py-2 px-6 hover:bg-yellow-500 hover:text-black transition-colors shadow-[0_0_10px_rgba(234,179,8,0.2)]">Перемешать</button>
+            <button id="next-btn" class="bg-black border border-cyan-600 text-cyan-500 uppercase tracking-widest py-2 px-6 hover:bg-cyan-900 transition-colors">Вперед >></button>
         </div>
     </div>
 
@@ -136,7 +211,6 @@
         const currentNum = document.getElementById('current-card-num');
         const totalNum = document.getElementById('total-cards-num');
 
-        // Завантаження слів із бази даних Firestore
         async function loadWords() {
             words = [];
             try {
@@ -149,44 +223,45 @@
                 renderList();
             } catch (error) {
                 console.error("Помилка завантаження:", error);
-                loadingMsg.innerText = "Помилка завантаження. Перевір налаштування Firestore (Test mode).";
+                loadingMsg.innerText = "[ERROR] Збій підключення до бази даних.";
+                loadingMsg.classList.replace("text-cyan-700", "text-red-500");
             }
         }
 
-        // Відображення списку слів
         function renderList() {
             wordList.innerHTML = '';
             wordCount.innerText = words.length;
 
             if (words.length === 0) {
-                wordList.innerHTML = '<li class="text-gray-400 text-center py-4">Словник порожній. Додай перше слово!</li>';
+                wordList.innerHTML = '<li class="text-cyan-800 text-center py-4 border border-cyan-900 border-dashed">NO DATA FOUND</li>';
                 return;
             }
 
             words.forEach((word) => {
                 const li = document.createElement('li');
-                li.className = 'flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200';
+                li.className = 'flex items-center justify-between bg-black p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group';
                 
-                const transcriptionHtml = word.transcription ? `<span class="text-blue-500 font-mono text-sm ml-2">[${word.transcription}]</span>` : '';
+                const transcriptionHtml = word.transcription ? `<span class="text-cyan-700 font-mono text-sm ml-2 group-hover:text-cyan-500 transition-colors">[${word.transcription}]</span>` : '';
                 
                 li.innerHTML = `
-                    <div class="flex items-center">
-                        <button class="delete-btn bg-red-100 hover:bg-red-200 text-red-500 p-2 rounded-md transition mr-3" data-id="${word.id}" title="Видалити">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <div class="flex items-center w-full">
+                        <button class="delete-btn text-cyan-900 hover:text-red-500 p-2 mr-3 transition-colors flex-shrink-0" data-id="${word.id}" title="Видалити">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </button>
-                        <div>
-                            <span class="font-bold text-lg">${word.english}</span>
-                            ${transcriptionHtml}
-                            <div class="text-gray-600 pl-[3.2rem] -mt-1">${word.ukrainian}</div>
+                        <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-1 items-baseline">
+                            <div>
+                                <span class="font-bold text-lg text-cyan-200 group-hover:text-white transition-colors">${word.english}</span>
+                                ${transcriptionHtml}
+                            </div>
+                            <div class="text-cyan-500 uppercase text-sm md:text-right">${word.ukrainian}</div>
                         </div>
                     </div>
                 `;
                 wordList.appendChild(li);
             });
 
-            // Додаємо подію видалення
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const id = e.target.getAttribute('data-id');
@@ -195,7 +270,6 @@
             });
         }
 
-        // Додавання слова
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const eng = engInput.value.trim();
@@ -204,10 +278,11 @@
 
             if (trans && !trans.startsWith('[')) trans = '[' + trans;
             if (trans && !trans.endsWith(']')) trans = trans + ']';
-            trans = trans.replace(/\[|\]/g, ''); // Зберігаємо чистий текст, дужки підставляє код
+            trans = trans.replace(/\[|\]/g, ''); 
 
-            submitBtn.innerText = 'Додаю...';
+            submitBtn.innerText = '[ ЗАГРУЗКА... ]';
             submitBtn.disabled = true;
+            submitBtn.classList.add('animate-pulse', 'text-yellow-400', 'border-yellow-400');
 
             try {
                 const docRef = await addDoc(collection(db, "words"), {
@@ -225,14 +300,14 @@
                 ukrInput.value = '';
             } catch (error) {
                 console.error("Помилка збереження:", error);
-                alert("Помилка збереження. Перевір правила бази даних (Firestore).");
+                alert("ACCESS DENIED: Ошибка записи в БД.");
             } finally {
-                submitBtn.innerText = 'Додати слово';
+                submitBtn.innerText = '[ Загрузить в базу ]';
                 submitBtn.disabled = false;
+                submitBtn.classList.remove('animate-pulse', 'text-yellow-400', 'border-yellow-400');
             }
         });
 
-        // Видалення слова
         async function deleteWordFromDB(id) {
             try {
                 await deleteDoc(doc(db, "words", id));
@@ -243,8 +318,6 @@
             }
         }
 
-        // --- ЛОГІКА ФЛЕШ-КАРТОК --- //
-        
         function shuffleArray(array) {
             let curId = array.length;
             while (0 !== curId) {
@@ -259,7 +332,7 @@
 
         practiceBtn.addEventListener('click', () => {
             if (words.length === 0) {
-                alert("Спершу додай слова до словника!");
+                alert("БАЗА ПУСТА. ДОБАВЬТЕ ДАННЫЕ.");
                 return;
             }
             practiceWords = shuffleArray([...words]);
@@ -324,7 +397,6 @@
             updateCard();
         });
 
-        // Запуск
         loadWords();
     </script>
 </body>
