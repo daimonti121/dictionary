@@ -16,7 +16,7 @@
                     },
                     colors: {
                         neon: '#06b6d4', 
-                        darkbg: '#030712', 
+                        darkbg: '#010308', 
                         panel: '#082f49', 
                         samurai: '#06b6d4'
                     }
@@ -25,12 +25,31 @@
         }
     </script>
     <style>
+        /* АНИМИРОВАННЫЙ ОСНОВНОЙ ФОН */
         body {
-            background-color: #030712;
+            background-color: #010308;
             background-image: 
-                linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
+                linear-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 15s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 40px 40px; }
+        }
+
+        /* ЭФФЕКТ CRT-МОНИТОРА (Сканлайны и виньетка) */
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), 
+                radial-gradient(circle at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%);
+            background-size: 100% 4px, 100% 100%;
+            pointer-events: none;
+            z-index: 9999; /* Поверх всего, даже модалок */
         }
         
         .neon-border {
@@ -48,7 +67,7 @@
         .flipped .card-inner { transform: rotateY(180deg); }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #030712; border-left: 1px solid #082f49; }
+        ::-webkit-scrollbar-track { background: #010308; border-left: 1px solid #082f49; }
         ::-webkit-scrollbar-thumb { background: #06b6d4; }
 
         .scanline {
@@ -152,8 +171,11 @@
 </head>
 <body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4">
 
+    <!-- ГЛОБАЛЬНЫЙ ЭФФЕКТ ЭКРАНА -->
+    <div class="crt-overlay"></div>
+
     <!-- ЭКРАН ЗАГРУЗКИ -->
-    <div id="boot-screen" class="fixed inset-0 bg-black z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
+    <div id="boot-screen" class="fixed inset-0 bg-[#010308] z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
         <div class="scanline"></div>
         <div class="w-full max-w-2xl relative">
             <div class="text-xs text-cyan-500 absolute -top-8 right-0 animate-pulse font-bold">WARNING // UNAUTHORIZED ACCESS</div>
@@ -186,7 +208,7 @@
     </div>
 
     <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
-    <div id="main-app" class="w-full max-w-2xl flex flex-col gap-6 opacity-0 transition-opacity duration-1000">
+    <div id="main-app" class="w-full max-w-2xl flex flex-col gap-6 opacity-0 transition-opacity duration-1000 z-10 relative">
         
         <div class="flex justify-between items-end border-b-2 border-cyan-500 pb-2 mb-2 mt-4">
             <div>
@@ -199,7 +221,7 @@
             </div>
         </div>
 
-        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border">
+        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border backdrop-blur-sm">
             <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-500"></div>
             <div class="absolute bottom-0 right-0 w-2 h-2 bg-cyan-500"></div>
             
@@ -228,7 +250,7 @@
             </button>
         </div>
 
-        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10">
+        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10 backdrop-blur-sm">
             <div class="flex justify-between items-center mb-4 border-b border-cyan-900 pb-2">
                 <h2 class="text-lg tracking-widest uppercase text-cyan-200">> База данных</h2>
                 <div class="text-sm text-cyan-600">RECORDS: <span id="word-count" class="text-cyan-300">0</span></div>
@@ -242,7 +264,7 @@
     </div>
 
     <!-- Модальне вікно для карток -->
-    <div id="modal" class="fixed inset-0 bg-gray-950 bg-opacity-95 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-sm">
+    <div id="modal" class="fixed inset-0 bg-gray-950 bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
         <div class="absolute top-4 left-4 text-xs text-cyan-800 pointer-events-none">SYSTEM OVERRIDE // ACTIVE</div>
         <div class="absolute bottom-4 right-4 text-xs text-cyan-800 pointer-events-none">MEMORY SECTOR 7G</div>
         <button id="close-modal" class="absolute top-6 right-6 text-cyan-500 text-4xl hover:text-cyan-300 hover:scale-110 transition-transform">&times;</button>
