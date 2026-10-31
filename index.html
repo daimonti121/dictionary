@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER_DICT // V1.0</title>
+    <title>NEURO_LEX // V1.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
@@ -16,7 +16,7 @@
                     },
                     colors: {
                         neon: '#06b6d4', 
-                        darkbg: '#010308', 
+                        darkbg: '#020b1a', /* Более насыщенный сине-черный */
                         panel: '#082f49', 
                         samurai: '#06b6d4'
                     }
@@ -25,19 +25,21 @@
         }
     </script>
     <style>
-        /* АНИМИРОВАННЫЙ ОСНОВНОЙ ФОН */
+        /* АНИМИРОВАННЫЙ ОСНОВНОЙ ФОН С СИНИМ СВЕЧЕНИЕМ */
         body {
-            background-color: #010308;
+            background-color: #020b1a; /* Глубокий синий космос */
             background-image: 
-                linear-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6, 182, 212, 0.08) 1px, transparent 1px);
-            background-size: 40px 40px;
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 70%),
+                linear-gradient(rgba(6, 182, 212, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.15) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
             animation: gridMove 15s linear infinite;
+            background-attachment: fixed;
         }
         
         @keyframes gridMove {
-            0% { background-position: 0px 0px; }
-            100% { background-position: 40px 40px; }
+            0% { background-position: center, 0px 0px, 0px 0px; }
+            100% { background-position: center, 40px 40px, 40px 40px; }
         }
 
         /* ЭФФЕКТ CRT-МОНИТОРА (Сканлайны и виньетка) */
@@ -46,17 +48,17 @@
             top: 0; left: 0; right: 0; bottom: 0;
             background: 
                 linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), 
-                radial-gradient(circle at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%);
+                radial-gradient(circle at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
             background-size: 100% 4px, 100% 100%;
             pointer-events: none;
-            z-index: 9999; /* Поверх всего, даже модалок */
+            z-index: 9999;
         }
         
         .neon-border {
-            box-shadow: 0 0 5px rgba(6, 182, 212, 0.3), inset 0 0 5px rgba(6, 182, 212, 0.1);
+            box-shadow: 0 0 5px rgba(6, 182, 212, 0.4), inset 0 0 5px rgba(6, 182, 212, 0.1);
         }
         .neon-border:focus-within, .neon-border:hover {
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.6), inset 0 0 10px rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.8), inset 0 0 10px rgba(6, 182, 212, 0.3);
         }
 
         .perspective-1000 { perspective: 1000px; }
@@ -67,28 +69,28 @@
         .flipped .card-inner { transform: rotateY(180deg); }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #010308; border-left: 1px solid #082f49; }
+        ::-webkit-scrollbar-track { background: #020b1a; border-left: 1px solid #082f49; }
         ::-webkit-scrollbar-thumb { background: #06b6d4; }
 
         .scanline {
             width: 100%;
             height: 2px;
-            background-color: rgba(6, 182, 212, 0.6);
+            background-color: rgba(6, 182, 212, 0.8);
             position: absolute;
             top: 0;
             left: 0;
-            animation: scan 2s linear infinite;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 1);
+            animation: scan 2.5s linear infinite;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 1);
             z-index: 10;
         }
         @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
+            0% { top: -10%; }
+            100% { top: 110%; }
         }
 
         .glitch-container { position: relative; }
         .glitch-img {
-            filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.8));
+            filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.9));
             animation: glitch-anim-img 3s infinite linear alternate-reverse;
         }
         
@@ -129,10 +131,10 @@
             100% { clip: rect(10px, 9999px, 31px, 0); transform: skew(0deg); }
         }
         @keyframes glitch-anim-img {
-            0% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(6, 182, 212, 0.8)); }
+            0% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 15px rgba(6, 182, 212, 0.9)); }
             20% { transform: translate(-2px, 1px); }
-            21% { transform: translate(2px, -1px); filter: hue-rotate(-90deg) drop-shadow(0 0 20px rgba(255, 0, 60, 0.8)); }
-            22% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(6, 182, 212, 0.8)); }
+            21% { transform: translate(2px, -1px); filter: hue-rotate(-90deg) drop-shadow(0 0 25px rgba(255, 0, 60, 0.9)); }
+            22% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 15px rgba(6, 182, 212, 0.9)); }
             80% { transform: translate(0); }
             81% { transform: translate(1px, 2px); opacity: 0.8; }
             82% { transform: translate(-1px, -2px); opacity: 1; }
@@ -146,20 +148,18 @@
             100% { transform: skew(0deg); }
         }
 
-        /* АНИМАЦИЯ: Добавление слова */
         @keyframes cyber-insert {
             0% { opacity: 0; transform: translateX(-50px) scaleY(0.8); filter: brightness(2) hue-rotate(90deg); background-color: rgba(6, 182, 212, 0.5); border-left-width: 10px; }
             60% { opacity: 1; transform: translateX(10px) scaleY(1.05); filter: brightness(1.5); background-color: rgba(6, 182, 212, 0.2); }
-            100% { opacity: 1; transform: translateX(0) scaleY(1); filter: brightness(1); background-color: black; border-left-width: 2px; }
+            100% { opacity: 1; transform: translateX(0) scaleY(1); filter: brightness(1); background-color: rgba(2, 11, 26, 0.8); border-left-width: 2px; }
         }
         .animate-new-word {
             animation: cyber-insert 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             box-shadow: inset 5px 0 20px rgba(6, 182, 212, 0.4);
         }
 
-        /* АНИМАЦИЯ: Удаление слова */
         @keyframes cyber-delete {
-            0% { opacity: 1; transform: translateX(0); background-color: black; border-left-color: #06b6d4; }
+            0% { opacity: 1; transform: translateX(0); background-color: rgba(2, 11, 26, 0.8); border-left-color: #06b6d4; }
             20% { opacity: 1; transform: translateX(15px) skewX(-10deg); background-color: rgba(255, 0, 60, 0.4); border-left-color: #ff003c; filter: drop-shadow(0 0 10px #ff003c); }
             100% { opacity: 0; transform: translateX(-100px) skewX(20deg); padding: 0; margin: 0; height: 0; border: none; }
         }
@@ -169,94 +169,99 @@
         }
     </style>
 </head>
-<body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4">
+<body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4 relative">
 
     <!-- ГЛОБАЛЬНЫЙ ЭФФЕКТ ЭКРАНА -->
     <div class="crt-overlay"></div>
 
     <!-- ЭКРАН ЗАГРУЗКИ -->
-    <div id="boot-screen" class="fixed inset-0 bg-[#010308] z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
+    <!-- Изменен цвет фона на #020b1a для совпадения с основной темой -->
+    <div id="boot-screen" class="fixed inset-0 bg-[#020b1a] z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
+        
+        <!-- Добавлено радиальное свечение на стартовый экран -->
+        <div class="absolute inset-0 opacity-50" style="background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 70%);"></div>
+        
         <div class="scanline"></div>
-        <div class="w-full max-w-2xl relative">
-            <div class="text-xs text-cyan-500 absolute -top-8 right-0 animate-pulse font-bold">WARNING // UNAUTHORIZED ACCESS</div>
+        <div class="w-full max-w-2xl relative z-10">
+            <div class="text-xs text-cyan-400 absolute -top-8 right-0 animate-pulse font-bold tracking-widest">SECURE CONNECTION ESTABLISHED</div>
             
             <div class="flex flex-col items-center justify-center mb-8 glitch-container">
                 <img src="samurai.png" alt="Samurai Logo" class="w-40 h-40 object-contain glitch-img" 
                      onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'none\' stroke=\'%2306b6d4\' stroke-width=\'4\' stroke-dasharray=\'10,5\'/></svg>'">
-                <div class="mt-4 text-4xl font-bold tracking-[0.3em] glitch-text" data-text="SAMURAI">SAMURAI</div>
+                <div class="mt-4 text-4xl font-bold tracking-[0.4em] glitch-text" data-text="NEURO_LEX">NEURO_LEX</div>
             </div>
 
-            <div class="border-2 border-cyan-800 p-6 bg-gray-900 bg-opacity-50 relative shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500"></div>
-                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-500"></div>
+            <div class="border-2 border-cyan-700 p-6 bg-[#041124] bg-opacity-70 relative shadow-[0_0_20px_rgba(6,182,212,0.25)]">
+                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
+                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
                 
-                <h1 class="text-xl font-bold text-cyan-500 mb-4 uppercase tracking-widest">> Neural Link Established...</h1>
+                <h1 class="text-xl font-bold text-cyan-400 mb-4 uppercase tracking-widest">> SYNAPSE BOOT SEQUENCE...</h1>
                 
-                <div id="boot-log" class="text-sm text-cyan-400 h-24 overflow-hidden flex flex-col justify-end mb-4 border-l border-cyan-900 pl-4 space-y-1 opacity-80"></div>
+                <div id="boot-log" class="text-sm text-cyan-300 h-24 overflow-hidden flex flex-col justify-end mb-4 border-l border-cyan-800 pl-4 space-y-1 opacity-90"></div>
 
-                <div class="w-full h-6 border border-cyan-800 bg-black p-1 relative">
-                    <div id="boot-progress" class="h-full bg-cyan-600 w-0 transition-all duration-[200ms] ease-out shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
+                <div class="w-full h-6 border border-cyan-700 bg-black p-1 relative">
+                    <div id="boot-progress" class="h-full bg-cyan-500 w-0 transition-all duration-[200ms] ease-out shadow-[0_0_15px_rgba(6,182,212,0.9)]"></div>
                     <div class="absolute inset-0 flex justify-center items-center text-xs font-bold text-white mix-blend-difference tracking-widest" id="boot-percent">0%</div>
                 </div>
                 
-                <div class="flex justify-between mt-2 text-xs text-cyan-700">
-                    <span>BREACH_PROTOCOL // ACTIVE</span>
-                    <span>TARGET: DICTIONARY_DB</span>
+                <div class="flex justify-between mt-2 text-xs text-cyan-600">
+                    <span>MEMORY_BANK // SECTOR_4</span>
+                    <span>TARGET: LEXICON_DB</span>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
-    <div id="main-app" class="w-full max-w-2xl flex flex-col gap-6 opacity-0 transition-opacity duration-1000 z-10 relative">
+    <div id="main-app" class="w-full max-w-2xl flex flex-col gap-6 opacity-0 transition-opacity duration-1000 z-10 relative mt-4">
         
-        <div class="flex justify-between items-end border-b-2 border-cyan-500 pb-2 mb-2 mt-4">
+        <div class="flex justify-between items-end border-b-2 border-cyan-600 pb-2 mb-2">
             <div>
-                <div class="text-xs text-cyan-700">SYS.ADMIN // ACCESS GRANTED</div>
-                <h1 class="text-3xl tracking-widest font-bold text-cyan-300">CYBER_DICT</h1>
+                <div class="text-xs text-cyan-600 tracking-widest uppercase">SYS.ADMIN // ACCESS GRANTED</div>
+                <h1 class="text-4xl tracking-[0.2em] font-bold text-cyan-400 mt-1">NEURO_LEX</h1>
             </div>
             <div class="text-right hidden sm:block">
-                <div class="text-xs text-cyan-700">STATUS: ONLINE</div>
-                <div class="text-sm">ROOT@DATA:~#</div>
+                <div class="text-xs text-cyan-600">STATUS: ONLINE</div>
+                <div class="text-sm tracking-wider text-cyan-500">ROOT@SYNAPSE:~#</div>
             </div>
         </div>
 
-        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border backdrop-blur-sm">
-            <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-500"></div>
-            <div class="absolute bottom-0 right-0 w-2 h-2 bg-cyan-500"></div>
+        <div class="bg-[#041124] bg-opacity-80 border border-cyan-800 p-6 relative neon-border backdrop-blur-sm">
+            <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-400"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 bg-cyan-400"></div>
             
-            <h2 class="text-lg tracking-widest mb-4 uppercase text-cyan-200">> Инициализация новой записи</h2>
+            <h2 class="text-lg tracking-widest mb-4 uppercase text-cyan-300">> Инициализация новой записи</h2>
             <form id="add-word-form" class="flex flex-col gap-4">
                 <input type="text" id="eng-input" placeholder="EN_DATA (e.g. Vulnerability)" required
-                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-300 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
+                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
                 <input type="text" id="trans-input" placeholder="PHONETICS (optional)"
-                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-300 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
+                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
                 <input type="text" id="ukr-input" placeholder="UA_DATA (e.g. Уразливість)" required
-                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-300 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
+                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
                 <button type="submit" id="submit-btn"
-                    class="mt-2 bg-cyan-950 border-2 border-cyan-500 text-cyan-300 font-bold uppercase tracking-widest p-3 hover:bg-cyan-500 hover:text-black transition-all">
+                    class="mt-2 bg-cyan-950 border-2 border-cyan-600 text-cyan-300 font-bold uppercase tracking-widest p-3 hover:bg-cyan-500 hover:text-black transition-all">
                     [ Загрузить в базу ]
                 </button>
             </form>
         </div>
 
         <div class="flex justify-center my-2">
-            <button id="practice-btn" class="bg-black border-2 border-green-500 text-green-400 font-bold tracking-widest py-3 px-10 hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:shadow-[0_0_25px_rgba(34,197,94,0.6)] uppercase flex items-center gap-2">
+            <button id="practice-btn" class="bg-[#020b1a] border-2 border-green-500 text-green-400 font-bold tracking-widest py-3 px-10 hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:shadow-[0_0_25px_rgba(34,197,94,0.7)] uppercase flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 Запуск симуляции
             </button>
         </div>
 
-        <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10 backdrop-blur-sm">
+        <div class="bg-[#041124] bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10 backdrop-blur-sm">
             <div class="flex justify-between items-center mb-4 border-b border-cyan-900 pb-2">
-                <h2 class="text-lg tracking-widest uppercase text-cyan-200">> База данных</h2>
+                <h2 class="text-lg tracking-widest uppercase text-cyan-300">> База данных</h2>
                 <div class="text-sm text-cyan-600">RECORDS: <span id="word-count" class="text-cyan-300">0</span></div>
             </div>
             
-            <div id="loading-msg" class="text-cyan-700 animate-pulse">Установка соединения с сервером...</div>
+            <div id="loading-msg" class="text-cyan-600 animate-pulse">Установка соединения с сервером...</div>
             
             <ul id="word-list" class="flex flex-col gap-2 overflow-hidden">
             </ul>
@@ -264,9 +269,9 @@
     </div>
 
     <!-- Модальне вікно для карток -->
-    <div id="modal" class="fixed inset-0 bg-gray-950 bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
-        <div class="absolute top-4 left-4 text-xs text-cyan-800 pointer-events-none">SYSTEM OVERRIDE // ACTIVE</div>
-        <div class="absolute bottom-4 right-4 text-xs text-cyan-800 pointer-events-none">MEMORY SECTOR 7G</div>
+    <div id="modal" class="fixed inset-0 bg-[#010612] bg-opacity-95 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
+        <div class="absolute top-4 left-4 text-xs text-cyan-700 pointer-events-none">SYSTEM OVERRIDE // ACTIVE</div>
+        <div class="absolute bottom-4 right-4 text-xs text-cyan-700 pointer-events-none">MEMORY SECTOR 7G</div>
         <button id="close-modal" class="absolute top-6 right-6 text-cyan-500 text-4xl hover:text-cyan-300 hover:scale-110 transition-transform">&times;</button>
         
         <div class="text-cyan-500 mb-6 text-lg tracking-widest uppercase border-b border-cyan-800 pb-1">
@@ -275,18 +280,18 @@
 
         <div id="flashcard" class="w-full max-w-md h-72 perspective-1000 cursor-pointer relative">
             <div class="card-inner relative w-full h-full transform-style-3d">
-                <div class="absolute w-full h-full backface-hidden bg-black border-2 border-cyan-500 flex flex-col justify-center items-center p-6 text-center neon-border">
+                <div class="absolute w-full h-full backface-hidden bg-[#041124] border-2 border-cyan-500 flex flex-col justify-center items-center p-6 text-center neon-border shadow-[0_0_30px_rgba(6,182,212,0.2)]">
                     <div class="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
                     <div class="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
-                    <span class="text-5xl font-bold text-cyan-100 tracking-wider" id="card-eng"></span>
-                    <span class="text-xl text-cyan-600 mt-4 font-mono" id="card-trans"></span>
+                    <span class="text-5xl font-bold text-cyan-200 tracking-wider" id="card-eng"></span>
+                    <span class="text-xl text-cyan-500 mt-4 font-mono" id="card-trans"></span>
                     <div class="absolute bottom-6 w-full text-center">
-                        <span class="text-xs text-cyan-800 uppercase animate-pulse">[ Клик для дешифровки ]</span>
+                        <span class="text-xs text-cyan-700 uppercase animate-pulse">[ Клик для дешифровки ]</span>
                     </div>
                 </div>
-                <div class="absolute w-full h-full backface-hidden bg-cyan-900 border-2 border-cyan-400 flex flex-col justify-center items-center p-6 text-center rotate-y-180 neon-border">
+                <div class="absolute w-full h-full backface-hidden bg-cyan-900 border-2 border-cyan-400 flex flex-col justify-center items-center p-6 text-center rotate-y-180 neon-border shadow-[0_0_30px_rgba(6,182,212,0.4)]">
                     <div class="absolute top-0 left-0 w-full h-1 bg-cyan-400"></div>
-                    <span class="text-4xl font-bold text-black uppercase tracking-wider bg-cyan-400 px-4 py-2" id="card-ukr"></span>
+                    <span class="text-4xl font-bold text-[#010612] uppercase tracking-wider bg-cyan-400 px-4 py-2" id="card-ukr"></span>
                 </div>
             </div>
         </div>
@@ -324,11 +329,11 @@
         const bootPercent = document.getElementById('boot-percent');
 
         const logLines = [
-            "> RUNNING ICE_PICK.EXE...",
+            "> MOUNTING LEXICON DRIVE...",
             "> BYPASSING MAINFIREWALL...",
             "> OVERRIDING SUBSYSTEMS [OK]",
-            "> EXTRACTING DICTIONARY DATA...",
-            "> COMPILING NEURAL INTERFACE...",
+            "> EXTRACTING NEURAL DATA...",
+            "> COMPILING SYNAPSE INTERFACE...",
             "> BREACH COMPLETE."
         ];
 
@@ -356,13 +361,13 @@
                 clearInterval(logInterval);
                 
                 setTimeout(() => {
-                    bootScreen.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                    bootScreen.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
                     bootScreen.style.opacity = '0';
-                    bootScreen.style.transform = 'scale(1.1)'; 
+                    bootScreen.style.transform = 'scale(1.05)'; 
                     
                     mainApp.style.opacity = '1';
                     
-                    setTimeout(() => bootScreen.remove(), 500);
+                    setTimeout(() => bootScreen.remove(), 600);
                 }, 800);
             }
         }, 250);
@@ -407,7 +412,7 @@
             } catch (error) {
                 console.error("Помилка завантаження:", error);
                 loadingMsg.innerText = "[ERROR] Збій підключення до бази даних.";
-                loadingMsg.classList.replace("text-cyan-700", "text-red-500");
+                loadingMsg.classList.replace("text-cyan-600", "text-red-500");
             }
         }
 
@@ -416,7 +421,7 @@
             wordCount.innerText = words.length;
 
             if (words.length === 0) {
-                wordList.innerHTML = '<li class="text-cyan-800 text-center py-4 border border-cyan-900 border-dashed">NO DATA FOUND</li>';
+                wordList.innerHTML = '<li class="text-cyan-700 text-center py-4 border border-cyan-900 border-dashed bg-[#020b1a] bg-opacity-50">NO DATA FOUND</li>';
                 return;
             }
 
@@ -425,13 +430,13 @@
                 const li = document.createElement('li');
                 
                 li.id = `word-item-${word.id}`;
-                li.className = `flex items-center justify-between bg-black p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden ${isNew ? 'animate-new-word' : ''}`;
+                li.className = `flex items-center justify-between bg-[#020b1a] bg-opacity-80 p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden ${isNew ? 'animate-new-word' : ''}`;
                 
-                const transcriptionHtml = word.transcription ? `<span class="text-cyan-700 font-mono text-sm ml-2 group-hover:text-cyan-500 transition-colors">[${word.transcription}]</span>` : '';
+                const transcriptionHtml = word.transcription ? `<span class="text-cyan-600 font-mono text-sm ml-2 group-hover:text-cyan-400 transition-colors">[${word.transcription}]</span>` : '';
                 
                 li.innerHTML = `
                     <div class="flex items-center w-full">
-                        <button class="delete-btn text-cyan-900 hover:text-red-500 p-2 mr-3 transition-colors flex-shrink-0" data-id="${word.id}" title="Удалить">
+                        <button class="delete-btn text-cyan-800 hover:text-red-500 p-2 mr-3 transition-colors flex-shrink-0" data-id="${word.id}" title="Удалить">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
