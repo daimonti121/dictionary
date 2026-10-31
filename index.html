@@ -317,6 +317,21 @@
         </div>
     </div>
 
+    <!-- Модальне вікно дубліката -->
+    <div id="duplicate-modal" class="fixed inset-0 bg-[#010612] bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
+        <div class="border-2 border-cyan-500 bg-[#041124] p-6 max-w-sm w-full relative shadow-[0_0_25px_rgba(6,182,212,0.4)] text-center">
+            <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
+            <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
+            
+            <div class="text-cyan-400 font-bold tracking-widest uppercase mb-2 text-lg">! SYNAPSE WARNING !</div>
+            <p class="text-cyan-300 text-sm mb-6 font-mono">Такое слово уже добавлено в базу данных.</p>
+            
+            <div class="flex justify-center">
+                <button id="close-duplicate-modal" class="bg-cyan-950 border border-cyan-500 text-cyan-300 uppercase tracking-widest py-2 px-6 hover:bg-cyan-500 hover:text-black transition-colors text-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase та Логіка -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
@@ -419,6 +434,10 @@
         const confirmDeleteBtn = document.getElementById('confirm-delete');
         let wordToDeleteId = null;
 
+        // Элементы модального окна дубликатов
+        const duplicateModal = document.getElementById('duplicate-modal');
+        const closeDuplicateModalBtn = document.getElementById('close-duplicate-modal');
+
         async function loadWords() {
             words = [];
             try {
@@ -509,11 +528,25 @@
             }, 400);
         });
 
+        // Закрытие модалки дубликатов
+        closeDuplicateModalBtn.addEventListener('click', () => {
+            duplicateModal.classList.add('hidden');
+            duplicateModal.classList.remove('flex');
+        });
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const eng = engInput.value.trim();
             let trans = transInput.value.trim();
             const ukr = ukrInput.value.trim();
+
+            // Проверка на дубликаты (без учета регистра)
+            const isDuplicate = words.some(w => w.english.toLowerCase() === eng.toLowerCase());
+            if (isDuplicate) {
+                duplicateModal.classList.remove('hidden');
+                duplicateModal.classList.add('flex');
+                return;
+            }
 
             if (trans && !trans.startsWith('[')) trans = '[' + trans;
             if (trans && !trans.endsWith(']')) trans = trans + ']';
@@ -642,6 +675,10 @@
             // Закрытие модалки удаления по Escape
             if (!deleteModal.classList.contains('hidden') && e.key === 'Escape') {
                 cancelDeleteBtn.click();
+            }
+            // Закрытие модалки дубликатов по Escape или Enter/Space
+            if (!duplicateModal.classList.contains('hidden') && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
+                closeDuplicateModalBtn.click();
             }
         });
 
