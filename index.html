@@ -170,6 +170,13 @@
             animation: cyber-delete 0.4s ease-out forwards;
             pointer-events: none; 
         }
+        @keyframes card-shift {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); filter: blur(4px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
+        .animate-card-change {
+            animation: card-shift 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
     </style>
 </head>
 <body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4 relative">
@@ -637,6 +644,12 @@
 
         function updateCard() {
             flashcard.classList.remove('flipped');
+            
+            // Запуск анимации смены карточки
+            flashcard.classList.remove('animate-card-change');
+            void flashcard.offsetWidth;
+            flashcard.classList.add('animate-card-change');
+
             const word = practiceWords[currentCardIndex];
             
             setTimeout(() => {
