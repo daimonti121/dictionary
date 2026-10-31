@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEURO_LEX // V1.0</title>
+    <!-- Добавлен фавикон (использует твою картинку маски) -->
+    <link rel="icon" type="image/png" href="samurai.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
@@ -16,7 +19,7 @@
                     },
                     colors: {
                         neon: '#06b6d4', 
-                        darkbg: '#020b1a', /* Более насыщенный сине-черный */
+                        darkbg: '#020b1a', 
                         panel: '#082f49', 
                         samurai: '#06b6d4'
                     }
@@ -27,7 +30,7 @@
     <style>
         /* АНИМИРОВАННЫЙ ОСНОВНОЙ ФОН С СИНИМ СВЕЧЕНИЕМ */
         body {
-            background-color: #020b1a; /* Глубокий синий космос */
+            background-color: #020b1a; 
             background-image: 
                 radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 70%),
                 linear-gradient(rgba(6, 182, 212, 0.15) 1px, transparent 1px),
@@ -42,7 +45,7 @@
             100% { background-position: center, 40px 40px, 40px 40px; }
         }
 
-        /* ЭФФЕКТ CRT-МОНИТОРА (Сканлайны и виньетка) */
+        /* ЭФФЕКТ CRT-МОНИТОРА */
         .crt-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -171,16 +174,11 @@
 </head>
 <body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4 relative">
 
-    <!-- ГЛОБАЛЬНЫЙ ЭФФЕКТ ЭКРАНА -->
     <div class="crt-overlay"></div>
 
     <!-- ЭКРАН ЗАГРУЗКИ -->
-    <!-- Изменен цвет фона на #020b1a для совпадения с основной темой -->
     <div id="boot-screen" class="fixed inset-0 bg-[#020b1a] z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
-        
-        <!-- Добавлено радиальное свечение на стартовый экран -->
         <div class="absolute inset-0 opacity-50" style="background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 70%);"></div>
-        
         <div class="scanline"></div>
         <div class="w-full max-w-2xl relative z-10">
             <div class="text-xs text-cyan-400 absolute -top-8 right-0 animate-pulse font-bold tracking-widest">SECURE CONNECTION ESTABLISHED</div>
