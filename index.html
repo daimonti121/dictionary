@@ -83,9 +83,10 @@
         </div>
 
         <!-- Керування картками -->
-        <div class="flex gap-6 mt-8">
-            <button id="prev-btn" class="bg-white text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition">Назад</button>
-            <button id="next-btn" class="bg-white text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition">Вперед</button>
+        <div class="flex gap-4 mt-8">
+            <button id="prev-btn" class="bg-white text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition">Назад</button>
+            <button id="shuffle-btn" class="bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-500 transition">Перемешать</button>
+            <button id="next-btn" class="bg-white text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition">Вперед</button>
         </div>
     </div>
 
@@ -131,6 +132,7 @@
         const cardUkr = document.getElementById('card-ukr');
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
+        const shuffleBtn = document.getElementById('shuffle-btn');
         const currentNum = document.getElementById('current-card-num');
         const totalNum = document.getElementById('total-cards-num');
 
@@ -314,6 +316,12 @@
                 }
                 if (e.key === 'Escape') closeModalBtn.click();
             }
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            practiceWords = shuffleArray(practiceWords);
+            currentCardIndex = 0;
+            updateCard();
         });
 
         // Запуск
