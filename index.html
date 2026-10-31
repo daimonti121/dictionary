@@ -51,7 +51,6 @@
         ::-webkit-scrollbar-track { background: #030712; border-left: 1px solid #082f49; }
         ::-webkit-scrollbar-thumb { background: #06b6d4; }
 
-        /* Анимация сканлайна */
         .scanline {
             width: 100%;
             height: 2px;
@@ -68,7 +67,6 @@
             100% { top: 100%; }
         }
 
-        /* Глитч-эффект для логотипа */
         .glitch-container { position: relative; }
         .glitch-img {
             filter: drop-shadow(0 0 10px rgba(255, 0, 60, 0.8));
@@ -129,7 +127,7 @@
             100% { transform: skew(0deg); }
         }
 
-        /* НОВА АНІМАЦІЯ: Додавання слова */
+        /* АНИМАЦИЯ: Добавление слова */
         @keyframes cyber-insert {
             0% { opacity: 0; transform: translateX(-50px) scaleY(0.8); filter: brightness(2) hue-rotate(90deg); background-color: rgba(6, 182, 212, 0.5); border-left-width: 10px; }
             60% { opacity: 1; transform: translateX(10px) scaleY(1.05); filter: brightness(1.5); background-color: rgba(6, 182, 212, 0.2); }
@@ -138,6 +136,17 @@
         .animate-new-word {
             animation: cyber-insert 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             box-shadow: inset 5px 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        /* НОВАЯ АНИМАЦИЯ: Удаление слова */
+        @keyframes cyber-delete {
+            0% { opacity: 1; transform: translateX(0); background-color: black; border-left-color: #06b6d4; }
+            20% { opacity: 1; transform: translateX(15px) skewX(-10deg); background-color: rgba(255, 0, 60, 0.4); border-left-color: #ff003c; filter: drop-shadow(0 0 10px #ff003c); }
+            100% { opacity: 0; transform: translateX(-100px) skewX(20deg); padding: 0; margin: 0; height: 0; border: none; }
+        }
+        .animate-delete-word {
+            animation: cyber-delete 0.4s ease-out forwards;
+            pointer-events: none; /* Защита от двойного клика */
         }
     </style>
 </head>
@@ -227,7 +236,7 @@
             
             <div id="loading-msg" class="text-cyan-700 animate-pulse">Установка соединения с сервером...</div>
             
-            <ul id="word-list" class="flex flex-col gap-2">
+            <ul id="word-list" class="flex flex-col gap-2 overflow-hidden">
             </ul>
         </div>
     </div>
@@ -380,7 +389,6 @@
             }
         }
 
-        // Оновлена функція з підтримкою анімації для нового слова
         function renderList(newWordId = null) {
             wordList.innerHTML = '';
             wordCount.innerText = words.length;
@@ -394,14 +402,15 @@
                 const isNew = word.id === newWordId;
                 const li = document.createElement('li');
                 
-                // Додаємо клас animate-new-word, якщо це щойно створене слово
-                li.className = `flex items-center justify-between bg-black p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group ${isNew ? 'animate-new-word' : ''}`;
+                // Добавляем уникальный ID каждому элементу списка для анимации удаления
+                li.id = `word-item-${word.id}`;
+                li.className = `flex items-center justify-between bg-black p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden ${isNew ? 'animate-new-word' : ''}`;
                 
                 const transcriptionHtml = word.transcription ? `<span class="text-cyan-700 font-mono text-sm ml-2 group-hover:text-cyan-500 transition-colors">[${word.transcription}]</span>` : '';
                 
                 li.innerHTML = `
                     <div class="flex items-center w-full">
-                        <button class="delete-btn text-cyan-900 hover:text-red-500 p-2 mr-3 transition-colors flex-shrink-0" data-id="${word.id}" title="Видалити">
+                        <button class="delete-btn text-cyan-900 hover:text-red-500 p-2 mr-3 transition-colors flex-shrink-0" data-id="${word.id}" title="Удалить">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
@@ -418,10 +427,23 @@
                 wordList.appendChild(li);
             });
 
+            // Обработчик удаления с анимацией
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
-                    const id = e.target.getAttribute('data-id');
-                    await deleteWordFromDB(id);
+                    // Используем closest, чтобы точно получить кнопку, даже если клик был по иконке внутри
+                    const btnElement = e.target.closest('.delete-btn');
+                    const id = btnElement.getAttribute('data-id');
+                    const listItem = document.getElementById(`word-item-${id}`);
+                    
+                    // Запускаем CSS-анимацию на строке
+                    if (listItem) {
+                        listItem.classList.add('animate-delete-word');
+                    }
+                    
+                    // Ждем 400мс (пока пройдет анимация), затем удаляем из БД и обновляем список
+                    setTimeout(async () => {
+                        await deleteWordFromDB(id);
+                    }, 400);
                 });
             });
         }
@@ -450,14 +472,12 @@
                 
                 words.unshift({ id: docRef.id, english: eng, transcription: trans, ukrainian: ukr });
                 
-                // Передаємо ID нового слова у функцію, щоб вона його анімувала
                 renderList(docRef.id); 
                 
                 engInput.value = '';
                 transInput.value = '';
                 ukrInput.value = '';
 
-                // Анімація успіху на самій кнопці
                 submitBtn.innerText = '[ ЗАПИСЬ УСПЕШНА ]';
                 submitBtn.classList.remove('animate-pulse', 'text-yellow-400', 'border-yellow-400');
                 submitBtn.classList.add('text-green-400', 'border-green-500', 'shadow-[0_0_15px_rgba(34,197,94,0.5)]');
@@ -570,4 +590,3 @@
     </script>
 </body>
 </html>
-
