@@ -18,7 +18,7 @@
                         neon: '#06b6d4', 
                         darkbg: '#030712', 
                         panel: '#082f49', 
-                        samurai: '#ff003c'
+                        samurai: '#06b6d4'
                     }
                 }
             }
@@ -54,12 +54,12 @@
         .scanline {
             width: 100%;
             height: 2px;
-            background-color: rgba(255, 0, 60, 0.6);
+            background-color: rgba(6, 182, 212, 0.6);
             position: absolute;
             top: 0;
             left: 0;
             animation: scan 2s linear infinite;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 1);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 1);
             z-index: 10;
         }
         @keyframes scan {
@@ -69,14 +69,14 @@
 
         .glitch-container { position: relative; }
         .glitch-img {
-            filter: drop-shadow(0 0 10px rgba(255, 0, 60, 0.8));
+            filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.8));
             animation: glitch-anim-img 3s infinite linear alternate-reverse;
         }
         
         .glitch-text {
             position: relative;
-            color: #ff003c;
-            text-shadow: 0 0 5px rgba(255, 0, 60, 0.8);
+            color: #06b6d4;
+            text-shadow: 0 0 5px rgba(6, 182, 212, 0.8);
             animation: glitch-skew 2s infinite linear alternate-reverse;
         }
         .glitch-text::before, .glitch-text::after {
@@ -89,13 +89,13 @@
         }
         .glitch-text::before {
             left: 2px;
-            text-shadow: -2px 0 #06b6d4;
+            text-shadow: -2px 0 #ff003c;
             clip: rect(44px, 450px, 56px, 0);
             animation: glitch-anim 5s infinite linear alternate-reverse;
         }
         .glitch-text::after {
             left: -2px;
-            text-shadow: -2px 0 #06b6d4, 2px 2px #ff003c;
+            text-shadow: -2px 0 #ff003c, 2px 2px #06b6d4;
             clip: rect(44px, 450px, 56px, 0);
             animation: glitch-anim 5s infinite linear alternate-reverse;
         }
@@ -110,10 +110,10 @@
             100% { clip: rect(10px, 9999px, 31px, 0); transform: skew(0deg); }
         }
         @keyframes glitch-anim-img {
-            0% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(255, 0, 60, 0.8)); }
+            0% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(6, 182, 212, 0.8)); }
             20% { transform: translate(-2px, 1px); }
-            21% { transform: translate(2px, -1px); filter: hue-rotate(90deg) drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)); }
-            22% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(255, 0, 60, 0.8)); }
+            21% { transform: translate(2px, -1px); filter: hue-rotate(-90deg) drop-shadow(0 0 20px rgba(255, 0, 60, 0.8)); }
+            22% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(6, 182, 212, 0.8)); }
             80% { transform: translate(0); }
             81% { transform: translate(1px, 2px); opacity: 0.8; }
             82% { transform: translate(-1px, -2px); opacity: 1; }
@@ -138,7 +138,7 @@
             box-shadow: inset 5px 0 20px rgba(6, 182, 212, 0.4);
         }
 
-        /* НОВАЯ АНИМАЦИЯ: Удаление слова */
+        /* АНИМАЦИЯ: Удаление слова */
         @keyframes cyber-delete {
             0% { opacity: 1; transform: translateX(0); background-color: black; border-left-color: #06b6d4; }
             20% { opacity: 1; transform: translateX(15px) skewX(-10deg); background-color: rgba(255, 0, 60, 0.4); border-left-color: #ff003c; filter: drop-shadow(0 0 10px #ff003c); }
@@ -146,7 +146,7 @@
         }
         .animate-delete-word {
             animation: cyber-delete 0.4s ease-out forwards;
-            pointer-events: none; /* Защита от двойного клика */
+            pointer-events: none; 
         }
     </style>
 </head>
@@ -156,28 +156,28 @@
     <div id="boot-screen" class="fixed inset-0 bg-black z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
         <div class="scanline"></div>
         <div class="w-full max-w-2xl relative">
-            <div class="text-xs text-red-500 absolute -top-8 right-0 animate-pulse font-bold">WARNING // UNAUTHORIZED ACCESS</div>
+            <div class="text-xs text-cyan-500 absolute -top-8 right-0 animate-pulse font-bold">WARNING // UNAUTHORIZED ACCESS</div>
             
             <div class="flex flex-col items-center justify-center mb-8 glitch-container">
                 <img src="samurai.png" alt="Samurai Logo" class="w-40 h-40 object-contain glitch-img" 
-                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'none\' stroke=\'%23ff003c\' stroke-width=\'4\' stroke-dasharray=\'10,5\'/></svg>'">
+                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'none\' stroke=\'%2306b6d4\' stroke-width=\'4\' stroke-dasharray=\'10,5\'/></svg>'">
                 <div class="mt-4 text-4xl font-bold tracking-[0.3em] glitch-text" data-text="SAMURAI">SAMURAI</div>
             </div>
 
-            <div class="border-2 border-red-800 p-6 bg-gray-900 bg-opacity-50 relative shadow-[0_0_15px_rgba(255,0,60,0.2)]">
-                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-500"></div>
-                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-red-500"></div>
+            <div class="border-2 border-cyan-800 p-6 bg-gray-900 bg-opacity-50 relative shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500"></div>
+                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-500"></div>
                 
-                <h1 class="text-xl font-bold text-red-500 mb-4 uppercase tracking-widest">> Neural Link Established...</h1>
+                <h1 class="text-xl font-bold text-cyan-500 mb-4 uppercase tracking-widest">> Neural Link Established...</h1>
                 
-                <div id="boot-log" class="text-sm text-red-400 h-24 overflow-hidden flex flex-col justify-end mb-4 border-l border-red-900 pl-4 space-y-1 opacity-80"></div>
+                <div id="boot-log" class="text-sm text-cyan-400 h-24 overflow-hidden flex flex-col justify-end mb-4 border-l border-cyan-900 pl-4 space-y-1 opacity-80"></div>
 
-                <div class="w-full h-6 border border-red-800 bg-black p-1 relative">
-                    <div id="boot-progress" class="h-full bg-red-600 w-0 transition-all duration-[200ms] ease-out shadow-[0_0_10px_rgba(255,0,60,0.8)]"></div>
+                <div class="w-full h-6 border border-cyan-800 bg-black p-1 relative">
+                    <div id="boot-progress" class="h-full bg-cyan-600 w-0 transition-all duration-[200ms] ease-out shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
                     <div class="absolute inset-0 flex justify-center items-center text-xs font-bold text-white mix-blend-difference tracking-widest" id="boot-percent">0%</div>
                 </div>
                 
-                <div class="flex justify-between mt-2 text-xs text-red-700">
+                <div class="flex justify-between mt-2 text-xs text-cyan-700">
                     <span>BREACH_PROTOCOL // ACTIVE</span>
                     <span>TARGET: DICTIONARY_DB</span>
                 </div>
@@ -402,7 +402,6 @@
                 const isNew = word.id === newWordId;
                 const li = document.createElement('li');
                 
-                // Добавляем уникальный ID каждому элементу списка для анимации удаления
                 li.id = `word-item-${word.id}`;
                 li.className = `flex items-center justify-between bg-black p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden ${isNew ? 'animate-new-word' : ''}`;
                 
@@ -427,20 +426,16 @@
                 wordList.appendChild(li);
             });
 
-            // Обработчик удаления с анимацией
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
-                    // Используем closest, чтобы точно получить кнопку, даже если клик был по иконке внутри
                     const btnElement = e.target.closest('.delete-btn');
                     const id = btnElement.getAttribute('data-id');
                     const listItem = document.getElementById(`word-item-${id}`);
                     
-                    // Запускаем CSS-анимацию на строке
                     if (listItem) {
                         listItem.classList.add('animate-delete-word');
                     }
                     
-                    // Ждем 400мс (пока пройдет анимация), затем удаляем из БД и обновляем список
                     setTimeout(async () => {
                         await deleteWordFromDB(id);
                     }, 400);
