@@ -18,6 +18,7 @@
                         neon: '#06b6d4', 
                         darkbg: '#030712', 
                         panel: '#082f49', 
+                        samurai: '#ff003c' // Красный цвет киберпанка
                     }
                 }
             }
@@ -54,16 +55,80 @@
         .scanline {
             width: 100%;
             height: 2px;
-            background-color: rgba(6, 182, 212, 0.5);
+            background-color: rgba(255, 0, 60, 0.6);
             position: absolute;
             top: 0;
             left: 0;
             animation: scan 2s linear infinite;
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 1);
+            z-index: 10;
         }
         @keyframes scan {
             0% { top: 0%; }
             100% { top: 100%; }
+        }
+
+        /* Глитч-эффект для логотипа и текста Samurai */
+        .glitch-container {
+            position: relative;
+        }
+        .glitch-img {
+            filter: drop-shadow(0 0 10px rgba(255, 0, 60, 0.8));
+            animation: glitch-anim-img 3s infinite linear alternate-reverse;
+        }
+        
+        .glitch-text {
+            position: relative;
+            color: #ff003c;
+            text-shadow: 0 0 5px rgba(255, 0, 60, 0.8);
+            animation: glitch-skew 2s infinite linear alternate-reverse;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #06b6d4;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #06b6d4, 2px 2px #ff003c;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 31px, 0); transform: skew(0.5deg); }
+            5% { clip: rect(70px, 9999px, 73px, 0); transform: skew(0.2deg); }
+            10% { clip: rect(40px, 9999px, 40px, 0); transform: skew(0.8deg); }
+            15% { clip: rect(98px, 9999px, 100px, 0); transform: skew(0.1deg); }
+            20% { clip: rect(12px, 9999px, 32px, 0); transform: skew(0.9deg); }
+            25% { clip: rect(65px, 9999px, 88px, 0); transform: skew(0.3deg); }
+            100% { clip: rect(10px, 9999px, 31px, 0); transform: skew(0deg); }
+        }
+        @keyframes glitch-anim-img {
+            0% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(255, 0, 60, 0.8)); }
+            20% { transform: translate(-2px, 1px); }
+            21% { transform: translate(2px, -1px); filter: hue-rotate(90deg) drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)); }
+            22% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(255, 0, 60, 0.8)); }
+            80% { transform: translate(0); }
+            81% { transform: translate(1px, 2px); opacity: 0.8; }
+            82% { transform: translate(-1px, -2px); opacity: 1; }
+            100% { transform: translate(0); }
+        }
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(-2deg); }
+            11% { transform: skew(2deg); }
+            12% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
         }
     </style>
 </head>
@@ -73,28 +138,35 @@
     <div id="boot-screen" class="fixed inset-0 bg-black z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
         <div class="scanline"></div>
         <div class="w-full max-w-2xl relative">
-            <div class="text-xs text-cyan-700 absolute -top-8 right-0 animate-pulse">SYSTEM_OVERRIDE_V.9.4</div>
+            <div class="text-xs text-red-500 absolute -top-8 right-0 animate-pulse font-bold">WARNING // UNAUTHORIZED ACCESS</div>
             
-            <div class="border-2 border-cyan-800 p-6 bg-gray-900 bg-opacity-50 relative neon-border">
-                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
-                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
+            <!-- Логотип Samurai -->
+            <div class="flex flex-col items-center justify-center mb-8 glitch-container">
+                <!-- Сюда подтянется твоя картинка samurai.png. Если её нет, будет красная рамка -->
+                <img src="samurai.png" alt="Samurai Logo" class="w-40 h-40 object-contain glitch-img" 
+                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'none\' stroke=\'%23ff003c\' stroke-width=\'4\' stroke-dasharray=\'10,5\'/></svg>'">
+                <div class="mt-4 text-4xl font-bold tracking-[0.3em] glitch-text" data-text="SAMURAI">SAMURAI</div>
+            </div>
+
+            <div class="border-2 border-red-800 p-6 bg-gray-900 bg-opacity-50 relative shadow-[0_0_15px_rgba(255,0,60,0.2)]">
+                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-500"></div>
+                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-red-500"></div>
                 
-                <h1 class="text-3xl font-bold text-cyan-500 mb-6 uppercase tracking-widest">> Инициализация...</h1>
+                <h1 class="text-xl font-bold text-red-500 mb-4 uppercase tracking-widest">> Neural Link Established...</h1>
                 
                 <!-- Лог загрузки -->
-                <div id="boot-log" class="text-sm text-cyan-600 h-32 overflow-hidden flex flex-col justify-end mb-4 border-l border-cyan-900 pl-4 space-y-1">
-                    <!-- Сюда JS будет подставлять строки терминала -->
+                <div id="boot-log" class="text-sm text-red-400 h-24 overflow-hidden flex flex-col justify-end mb-4 border-l border-red-900 pl-4 space-y-1 opacity-80">
                 </div>
 
                 <!-- Прогресс-бар -->
-                <div class="w-full h-8 border border-cyan-700 bg-black p-1 relative">
-                    <div id="boot-progress" class="h-full bg-cyan-600 w-0 transition-all duration-[200ms] ease-out"></div>
-                    <div class="absolute inset-0 flex justify-center items-center text-xs font-bold text-white mix-blend-difference" id="boot-percent">0%</div>
+                <div class="w-full h-6 border border-red-800 bg-black p-1 relative">
+                    <div id="boot-progress" class="h-full bg-red-600 w-0 transition-all duration-[200ms] ease-out shadow-[0_0_10px_rgba(255,0,60,0.8)]"></div>
+                    <div class="absolute inset-0 flex justify-center items-center text-xs font-bold text-white mix-blend-difference tracking-widest" id="boot-percent">0%</div>
                 </div>
                 
-                <div class="flex justify-between mt-2 text-xs text-cyan-800">
-                    <span>SECURE_LINK // CLOUD_DB</span>
-                    <span>MEM_ALLOC: 2048MB</span>
+                <div class="flex justify-between mt-2 text-xs text-red-700">
+                    <span>BREACH_PROTOCOL // ACTIVE</span>
+                    <span>TARGET: DICTIONARY_DB</span>
                 </div>
             </div>
         </div>
@@ -103,7 +175,6 @@
     <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <div id="main-app" class="w-full max-w-2xl flex flex-col gap-6 opacity-0 transition-opacity duration-1000">
         
-        <!-- Декоративный хедер -->
         <div class="flex justify-between items-end border-b-2 border-cyan-500 pb-2 mb-2 mt-4">
             <div>
                 <div class="text-xs text-cyan-700">SYS.ADMIN // ACCESS GRANTED</div>
@@ -115,7 +186,6 @@
             </div>
         </div>
 
-        <!-- Форма додавання слова -->
         <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border">
             <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-500"></div>
             <div class="absolute bottom-0 right-0 w-2 h-2 bg-cyan-500"></div>
@@ -138,7 +208,6 @@
             </form>
         </div>
 
-        <!-- Кнопка тренування -->
         <div class="flex justify-center my-2">
             <button id="practice-btn" class="bg-black border-2 border-green-500 text-green-400 font-bold tracking-widest py-3 px-10 hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:shadow-[0_0_25px_rgba(34,197,94,0.6)] uppercase flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
@@ -146,7 +215,6 @@
             </button>
         </div>
 
-        <!-- Список слів -->
         <div class="bg-gray-900 bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10">
             <div class="flex justify-between items-center mb-4 border-b border-cyan-900 pb-2">
                 <h2 class="text-lg tracking-widest uppercase text-cyan-200">> База данных</h2>
@@ -156,7 +224,6 @@
             <div id="loading-msg" class="text-cyan-700 animate-pulse">Установка соединения с сервером...</div>
             
             <ul id="word-list" class="flex flex-col gap-2">
-                <!-- Слова будут здесь -->
             </ul>
         </div>
     </div>
@@ -227,19 +294,17 @@
         const bootPercent = document.getElementById('boot-percent');
 
         const logLines = [
-            "> Подключение к центральному узлу...",
-            "> Обход брандмауэра...",
-            "> Проверка сертификатов безопасности [OK]",
-            "> Дешифровка базы данных Firebase...",
-            "> Монтирование секторов памяти...",
-            "> Компиляция интерфейса...",
-            "> ДОСТУП РАЗРЕШЕН."
+            "> RUNNING ICE_PICK.EXE...",
+            "> BYPASSING MAINFIREWALL...",
+            "> OVERRIDING SUBSYSTEMS [OK]",
+            "> EXTRACTING DICTIONARY DATA...",
+            "> COMPILING NEURAL INTERFACE...",
+            "> BREACH COMPLETE."
         ];
 
         let currentLine = 0;
         let progress = 0;
 
-        // Появление текста в терминале
         const logInterval = setInterval(() => {
             if (currentLine < logLines.length) {
                 const p = document.createElement('div');
@@ -249,7 +314,6 @@
             }
         }, 400);
 
-        // Движение прогресс-бара
         const progInterval = setInterval(() => {
             progress += Math.floor(Math.random() * 15) + 5;
             if (progress > 100) progress = 100;
@@ -261,20 +325,17 @@
                 clearInterval(progInterval);
                 clearInterval(logInterval);
                 
-                // Задержка перед скрытием экрана загрузки
                 setTimeout(() => {
                     bootScreen.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
                     bootScreen.style.opacity = '0';
-                    bootScreen.style.transform = 'scale(1.1)'; // легкий эффект "отлета"
+                    bootScreen.style.transform = 'scale(1.1)'; 
                     
-                    // Показываем основное приложение
                     mainApp.style.opacity = '1';
                     
                     setTimeout(() => bootScreen.remove(), 500);
-                }, 600);
+                }, 800); // Чуть увеличил задержку, чтобы успеть рассмотреть маску
             }
         }, 250);
-
 
         // --- ОСНОВНАЯ ЛОГИКА ПРИЛОЖЕНИЯ ---
         let words = [];
@@ -489,7 +550,6 @@
             updateCard();
         });
 
-        // Запускаем загрузку слов из базы сразу (пока идет анимация загрузочного экрана)
         loadWords();
     </script>
 </body>
