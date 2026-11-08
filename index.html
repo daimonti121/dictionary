@@ -1,544 +1,1046 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURO_LEX // V1.0</title>
-    <!-- Фавикон -->
-    <link rel="icon" type="image/png" href="samurai.png">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        cyber: ['"Share Tech Mono"', 'monospace'],
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>NEURO_LEX // V1.0</title>
+        <!-- Фавикон -->
+        <link rel="icon" type="image/png" href="samurai.png" />
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+            rel="stylesheet"
+        />
+
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            cyber: ['"Share Tech Mono"', 'monospace'],
+                        },
+                        colors: {
+                            neon: '#06b6d4',
+                            darkbg: '#020b1a',
+                            panel: '#082f49',
+                            samurai: '#06b6d4',
+                        },
                     },
-                    colors: {
-                        neon: '#06b6d4', 
-                        darkbg: '#020b1a', 
-                        panel: '#082f49', 
-                        samurai: '#06b6d4'
-                    }
+                },
+            };
+        </script>
+        <style>
+            /* АНИМИРОВАННЫЙ ОСНОВНОЙ ФОН С СИНИМ СВЕЧЕНИЕМ */
+            body {
+                background-color: #020b1a;
+                background-image:
+                    radial-gradient(
+                        circle at 50% 50%,
+                        rgba(6, 182, 212, 0.15) 0%,
+                        transparent 70%
+                    ),
+                    linear-gradient(
+                        rgba(6, 182, 212, 0.15) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(6, 182, 212, 0.15) 1px,
+                        transparent 1px
+                    );
+                background-size:
+                    100% 100%,
+                    40px 40px,
+                    40px 40px;
+                animation: gridMove 15s linear infinite;
+                background-attachment: fixed;
+            }
+
+            @keyframes gridMove {
+                0% {
+                    background-position:
+                        center,
+                        0px 0px,
+                        0px 0px;
+                }
+                100% {
+                    background-position:
+                        center,
+                        40px 40px,
+                        40px 40px;
                 }
             }
-        }
-    </script>
-    <style>
-        /* АНИМИРОВАННЫЙ ОСНОВНОЙ ФОН С СИНИМ СВЕЧЕНИЕМ */
-        body {
-            background-color: #020b1a; 
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 70%),
-                linear-gradient(rgba(6, 182, 212, 0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6, 182, 212, 0.15) 1px, transparent 1px);
-            background-size: 100% 100%, 40px 40px, 40px 40px;
-            animation: gridMove 15s linear infinite;
-            background-attachment: fixed;
-        }
-        
-        @keyframes gridMove {
-            0% { background-position: center, 0px 0px, 0px 0px; }
-            100% { background-position: center, 40px 40px, 40px 40px; }
-        }
 
-        /* ЭФФЕКТ CRT-МОНИТОРА */
-        .crt-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: 
-                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), 
-                radial-gradient(circle at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
-            background-size: 100% 4px, 100% 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        
-        .neon-border {
-            box-shadow: 0 0 5px rgba(6, 182, 212, 0.4), inset 0 0 5px rgba(6, 182, 212, 0.1);
-        }
-        .neon-border:focus-within, .neon-border:hover {
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.8), inset 0 0 10px rgba(6, 182, 212, 0.3);
-        }
+            /* ЭФФЕКТ CRT-МОНИТОРА */
+            .crt-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background:
+                    linear-gradient(
+                        rgba(18, 16, 16, 0) 50%,
+                        rgba(0, 0, 0, 0.15) 50%
+                    ),
+                    radial-gradient(
+                        circle at center,
+                        rgba(0, 0, 0, 0) 50%,
+                        rgba(0, 0, 0, 0.8) 100%
+                    );
+                background-size:
+                    100% 4px,
+                    100% 100%;
+                pointer-events: none;
+                z-index: 9999;
+            }
 
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-        .card-inner { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .flipped .card-inner { transform: rotateY(180deg); }
+            .neon-border {
+                box-shadow:
+                    0 0 5px rgba(6, 182, 212, 0.4),
+                    inset 0 0 5px rgba(6, 182, 212, 0.1);
+            }
+            .neon-border:focus-within,
+            .neon-border:hover {
+                box-shadow:
+                    0 0 15px rgba(6, 182, 212, 0.8),
+                    inset 0 0 10px rgba(6, 182, 212, 0.3);
+            }
 
-        /* Анимация перелистывания карточек */
-        @keyframes card-shift {
-            0% { opacity: 0; transform: scale(0.95) translateY(10px); filter: blur(4px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-        }
-        .animate-card-change {
-            animation: card-shift 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+            .perspective-1000 {
+                perspective: 1000px;
+            }
+            .transform-style-3d {
+                transform-style: preserve-3d;
+            }
+            .backface-hidden {
+                backface-visibility: hidden;
+            }
+            .rotate-y-180 {
+                transform: rotateY(180deg);
+            }
+            .card-inner {
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .flipped .card-inner {
+                transform: rotateY(180deg);
+            }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #020b1a; border-left: 1px solid #082f49; }
-        ::-webkit-scrollbar-thumb { background: #06b6d4; }
+            /* Анимация перелистывания карточек */
+            @keyframes card-shift {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.95) translateY(10px);
+                    filter: blur(4px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                    filter: blur(0);
+                }
+            }
+            .animate-card-change {
+                animation: card-shift 0.3s
+                    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            }
 
-        .scanline {
-            width: 100%;
-            height: 2px;
-            background-color: rgba(6, 182, 212, 0.8);
-            position: absolute;
-            top: 0;
-            left: 0;
-            animation: scan 2.5s linear infinite;
-            box-shadow: 0 0 20px rgba(6, 182, 212, 1);
-            z-index: 10;
-        }
-        @keyframes scan {
-            0% { top: -10%; }
-            100% { top: 110%; }
-        }
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #020b1a;
+                border-left: 1px solid #082f49;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #06b6d4;
+            }
 
-        .glitch-container { position: relative; }
-        .glitch-img {
-            filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.9));
-            animation: glitch-anim-img 3s infinite linear alternate-reverse;
-        }
-        
-        .glitch-text {
-            position: relative;
-            color: #06b6d4;
-            text-shadow: 0 0 5px rgba(6, 182, 212, 0.8);
-            animation: glitch-skew 2s infinite linear alternate-reverse;
-        }
-        .glitch-text::before, .glitch-text::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .glitch-text::before {
-            left: 2px;
-            text-shadow: -2px 0 #ff003c;
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim 5s infinite linear alternate-reverse;
-        }
-        .glitch-text::after {
-            left: -2px;
-            text-shadow: -2px 0 #ff003c, 2px 2px #06b6d4;
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim 5s infinite linear alternate-reverse;
-        }
+            .scanline {
+                width: 100%;
+                height: 2px;
+                background-color: rgba(6, 182, 212, 0.8);
+                position: absolute;
+                top: 0;
+                left: 0;
+                animation: scan 2.5s linear infinite;
+                box-shadow: 0 0 20px rgba(6, 182, 212, 1);
+                z-index: 10;
+            }
+            @keyframes scan {
+                0% {
+                    top: -10%;
+                }
+                100% {
+                    top: 110%;
+                }
+            }
 
-        @keyframes glitch-anim {
-            0% { clip: rect(10px, 9999px, 31px, 0); transform: skew(0.5deg); }
-            5% { clip: rect(70px, 9999px, 73px, 0); transform: skew(0.2deg); }
-            10% { clip: rect(40px, 9999px, 40px, 0); transform: skew(0.8deg); }
-            15% { clip: rect(98px, 9999px, 100px, 0); transform: skew(0.1deg); }
-            20% { clip: rect(12px, 9999px, 32px, 0); transform: skew(0.9deg); }
-            25% { clip: rect(65px, 9999px, 88px, 0); transform: skew(0.3deg); }
-            100% { clip: rect(10px, 9999px, 31px, 0); transform: skew(0deg); }
-        }
-        @keyframes glitch-anim-img {
-            0% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 15px rgba(6, 182, 212, 0.9)); }
-            20% { transform: translate(-2px, 1px); }
-            21% { transform: translate(2px, -1px); filter: hue-rotate(-90deg) drop-shadow(0 0 25px rgba(255, 0, 60, 0.9)); }
-            22% { transform: translate(0); filter: hue-rotate(0deg) drop-shadow(0 0 15px rgba(6, 182, 212, 0.9)); }
-            80% { transform: translate(0); }
-            81% { transform: translate(1px, 2px); opacity: 0.8; }
-            82% { transform: translate(-1px, -2px); opacity: 1; }
-            100% { transform: translate(0); }
-        }
-        @keyframes glitch-skew {
-            0% { transform: skew(0deg); }
-            10% { transform: skew(-2deg); }
-            11% { transform: skew(2deg); }
-            12% { transform: skew(0deg); }
-            100% { transform: skew(0deg); }
-        }
+            .glitch-container {
+                position: relative;
+            }
+            .glitch-img {
+                filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.9));
+                animation: glitch-anim-img 3s infinite linear alternate-reverse;
+            }
 
-        @keyframes cyber-insert {
-            0% { opacity: 0; transform: translateX(-50px) scaleY(0.8); filter: brightness(2) hue-rotate(90deg); background-color: rgba(6, 182, 212, 0.5); border-left-width: 10px; }
-            60% { opacity: 1; transform: translateX(10px) scaleY(1.05); filter: brightness(1.5); background-color: rgba(6, 182, 212, 0.2); }
-            100% { opacity: 1; transform: translateX(0) scaleY(1); filter: brightness(1); background-color: rgba(2, 11, 26, 0.8); border-left-width: 2px; }
-        }
-        .animate-new-word {
-            animation: cyber-insert 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            box-shadow: inset 5px 0 20px rgba(6, 182, 212, 0.4);
-        }
+            .glitch-text {
+                position: relative;
+                color: #06b6d4;
+                text-shadow: 0 0 5px rgba(6, 182, 212, 0.8);
+                animation: glitch-skew 2s infinite linear alternate-reverse;
+            }
+            .glitch-text::before,
+            .glitch-text::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .glitch-text::before {
+                left: 2px;
+                text-shadow: -2px 0 #ff003c;
+                clip: rect(44px, 450px, 56px, 0);
+                animation: glitch-anim 5s infinite linear alternate-reverse;
+            }
+            .glitch-text::after {
+                left: -2px;
+                text-shadow:
+                    -2px 0 #ff003c,
+                    2px 2px #06b6d4;
+                clip: rect(44px, 450px, 56px, 0);
+                animation: glitch-anim 5s infinite linear alternate-reverse;
+            }
 
-        @keyframes cyber-delete {
-            0% { opacity: 1; transform: translateX(0); background-color: rgba(2, 11, 26, 0.8); border-left-color: #06b6d4; }
-            20% { opacity: 1; transform: translateX(15px) skewX(-10deg); background-color: rgba(255, 0, 60, 0.4); border-left-color: #ff003c; filter: drop-shadow(0 0 10px #ff003c); }
-            100% { opacity: 0; transform: translateX(-100px) skewX(20deg); padding: 0; margin: 0; height: 0; border: none; }
-        }
-        .animate-delete-word {
-            animation: cyber-delete 0.4s ease-out forwards;
-            pointer-events: none; 
-        }
-    </style>
-</head>
-<body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4 relative">
+            @keyframes glitch-anim {
+                0% {
+                    clip: rect(10px, 9999px, 31px, 0);
+                    transform: skew(0.5deg);
+                }
+                5% {
+                    clip: rect(70px, 9999px, 73px, 0);
+                    transform: skew(0.2deg);
+                }
+                10% {
+                    clip: rect(40px, 9999px, 40px, 0);
+                    transform: skew(0.8deg);
+                }
+                15% {
+                    clip: rect(98px, 9999px, 100px, 0);
+                    transform: skew(0.1deg);
+                }
+                20% {
+                    clip: rect(12px, 9999px, 32px, 0);
+                    transform: skew(0.9deg);
+                }
+                25% {
+                    clip: rect(65px, 9999px, 88px, 0);
+                    transform: skew(0.3deg);
+                }
+                100% {
+                    clip: rect(10px, 9999px, 31px, 0);
+                    transform: skew(0deg);
+                }
+            }
+            @keyframes glitch-anim-img {
+                0% {
+                    transform: translate(0);
+                    filter: hue-rotate(0deg)
+                        drop-shadow(0 0 15px rgba(6, 182, 212, 0.9));
+                }
+                20% {
+                    transform: translate(-2px, 1px);
+                }
+                21% {
+                    transform: translate(2px, -1px);
+                    filter: hue-rotate(-90deg)
+                        drop-shadow(0 0 25px rgba(255, 0, 60, 0.9));
+                }
+                22% {
+                    transform: translate(0);
+                    filter: hue-rotate(0deg)
+                        drop-shadow(0 0 15px rgba(6, 182, 212, 0.9));
+                }
+                80% {
+                    transform: translate(0);
+                }
+                81% {
+                    transform: translate(1px, 2px);
+                    opacity: 0.8;
+                }
+                82% {
+                    transform: translate(-1px, -2px);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(0);
+                }
+            }
+            @keyframes glitch-skew {
+                0% {
+                    transform: skew(0deg);
+                }
+                10% {
+                    transform: skew(-2deg);
+                }
+                11% {
+                    transform: skew(2deg);
+                }
+                12% {
+                    transform: skew(0deg);
+                }
+                100% {
+                    transform: skew(0deg);
+                }
+            }
 
-    <div class="crt-overlay"></div>
+            @keyframes cyber-insert {
+                0% {
+                    opacity: 0;
+                    transform: translateX(-50px) scaleY(0.8);
+                    filter: brightness(2) hue-rotate(90deg);
+                    background-color: rgba(6, 182, 212, 0.5);
+                    border-left-width: 10px;
+                }
+                60% {
+                    opacity: 1;
+                    transform: translateX(10px) scaleY(1.05);
+                    filter: brightness(1.5);
+                    background-color: rgba(6, 182, 212, 0.2);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateX(0) scaleY(1);
+                    filter: brightness(1);
+                    background-color: rgba(2, 11, 26, 0.8);
+                    border-left-width: 2px;
+                }
+            }
+            .animate-new-word {
+                animation: cyber-insert 0.6s
+                    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                box-shadow: inset 5px 0 20px rgba(6, 182, 212, 0.4);
+            }
 
-    <!-- ЭКРАН ЗАГРУЗКИ -->
-    <div id="boot-screen" class="fixed inset-0 bg-[#020b1a] z-[100] flex flex-col justify-center items-center p-6 overflow-hidden">
-        <div class="absolute inset-0 opacity-50" style="background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 70%);"></div>
-        <div class="scanline"></div>
-        <div class="w-full max-w-2xl relative z-10">
-            <div class="text-xs text-cyan-400 absolute -top-8 right-0 animate-pulse font-bold tracking-widest">SECURE CONNECTION ESTABLISHED</div>
-            
-            <div class="flex flex-col items-center justify-center mb-8 glitch-container">
-                <img src="samurai.png" alt="Samurai Logo" class="w-40 h-40 object-contain glitch-img" 
-                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'none\' stroke=\'%2306b6d4\' stroke-width=\'4\' stroke-dasharray=\'10,5\'/></svg>'">
-                <div class="mt-4 text-4xl font-bold tracking-[0.4em] glitch-text" data-text="SAMURAI">SAMURAI</div>
-            </div>
+            @keyframes cyber-delete {
+                0% {
+                    opacity: 1;
+                    transform: translateX(0);
+                    background-color: rgba(2, 11, 26, 0.8);
+                    border-left-color: #06b6d4;
+                }
+                20% {
+                    opacity: 1;
+                    transform: translateX(15px) skewX(-10deg);
+                    background-color: rgba(255, 0, 60, 0.4);
+                    border-left-color: #ff003c;
+                    filter: drop-shadow(0 0 10px #ff003c);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateX(-100px) skewX(20deg);
+                    padding: 0;
+                    margin: 0;
+                    height: 0;
+                    border: none;
+                }
+            }
+            .animate-delete-word {
+                animation: cyber-delete 0.4s ease-out forwards;
+                pointer-events: none;
+            }
+        </style>
+    </head>
+    <body
+        class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4 relative"
+    >
+        <div class="crt-overlay"></div>
 
-            <div class="border-2 border-cyan-700 p-6 bg-[#041124] bg-opacity-70 relative shadow-[0_0_20px_rgba(6,182,212,0.25)]">
-                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
-                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
-                
-                <h1 class="text-xl font-bold text-cyan-400 mb-4 uppercase tracking-widest">> SYNAPSE BOOT SEQUENCE...</h1>
-                
-                <div id="boot-log" class="text-sm text-cyan-300 h-24 overflow-hidden flex flex-col justify-end mb-4 border-l border-cyan-800 pl-4 space-y-1 opacity-90"></div>
-
-                <div class="w-full h-6 border border-cyan-700 bg-black p-1 relative">
-                    <div id="boot-progress" class="h-full bg-cyan-500 w-0 transition-all duration-[200ms] ease-out shadow-[0_0_15px_rgba(6,182,212,0.9)]"></div>
-                    <div class="absolute inset-0 flex justify-center items-center text-xs font-bold text-white mix-blend-difference tracking-widest" id="boot-percent">0%</div>
+        <!-- ЭКРАН ЗАГРУЗКИ -->
+        <div
+            id="boot-screen"
+            class="fixed inset-0 bg-[#020b1a] z-[100] flex flex-col justify-center items-center p-6 overflow-hidden"
+        >
+            <div
+                class="absolute inset-0 opacity-50"
+                style="
+                    background: radial-gradient(
+                        circle at 50% 50%,
+                        rgba(6, 182, 212, 0.15) 0%,
+                        transparent 70%
+                    );
+                "
+            ></div>
+            <div class="scanline"></div>
+            <div class="w-full max-w-2xl relative z-10">
+                <div
+                    class="text-xs text-cyan-400 absolute -top-8 right-0 animate-pulse font-bold tracking-widest"
+                >
+                    SECURE CONNECTION ESTABLISHED
                 </div>
-                
-                <div class="flex justify-between mt-2 text-xs text-cyan-600">
-                    <span>MEMORY_BANK // SECTOR_4</span>
-                    <span>TARGET: LEXICON_DB</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
-    <div id="main-app" class="w-full max-w-2xl flex flex-col gap-6 opacity-0 transition-opacity duration-1000 z-10 relative mt-4">
-        
-        <div class="flex justify-between items-end border-b-2 border-cyan-600 pb-2 mb-2">
-            <div>
-                <div class="text-xs text-cyan-600 tracking-widest uppercase">SYS.ADMIN // ACCESS GRANTED</div>
-                <h1 class="text-4xl tracking-[0.2em] font-bold text-cyan-400 mt-1">SAMURAI</h1>
-            </div>
-            <div class="text-right hidden sm:block">
-                <div class="text-xs text-cyan-600">STATUS: ONLINE</div>
-                <div class="text-sm tracking-wider text-cyan-500">ROOT@SYNAPSE:~#</div>
-            </div>
-        </div>
-
-        <div class="bg-[#041124] bg-opacity-80 border border-cyan-800 p-6 relative neon-border backdrop-blur-sm">
-            <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-400"></div>
-            <div class="absolute bottom-0 right-0 w-2 h-2 bg-cyan-400"></div>
-            
-            <h2 class="text-lg tracking-widest mb-4 uppercase text-cyan-300">> Инициализация новой записи</h2>
-            <form id="add-word-form" class="flex flex-col gap-4">
-                <input type="text" id="eng-input" placeholder="PO_DATA (e.g. Vulnerability)" required
-                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
-                
-                <input type="text" id="trans-input" placeholder="PHONETICS (optional)"
-                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
-                
-                <input type="text" id="ukr-input" placeholder="RU_DATA (e.g. Уязвимость)" required
-                    class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
-                
-                <button type="submit" id="submit-btn"
-                    class="mt-2 bg-cyan-950 border-2 border-cyan-600 text-cyan-300 font-bold uppercase tracking-widest p-3 hover:bg-cyan-500 hover:text-black transition-all">
-                    [ Загрузить в базу ]
-                </button>
-            </form>
-        </div>
-
-        <div class="flex justify-center my-2">
-            <button id="practice-btn" class="bg-[#020b1a] border-2 border-green-500 text-green-400 font-bold tracking-widest py-3 px-10 hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:shadow-[0_0_25px_rgba(34,197,94,0.7)] uppercase flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                Запуск симуляции
-            </button>
-        </div>
-
-        <div class="bg-[#041124] bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10 backdrop-blur-sm">
-            <div class="flex justify-between items-center mb-4 border-b border-cyan-900 pb-2">
-                <h2 class="text-lg tracking-widest uppercase text-cyan-300">> База данных</h2>
-                <div class="text-sm text-cyan-600">RECORDS: <span id="word-count" class="text-cyan-300">0</span></div>
-            </div>
-            
-            <!-- Пошук по базі -->
-            <div class="mb-4 relative group">
-                <div class="absolute top-0 left-0 w-1 h-1 bg-cyan-500 z-10"></div>
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-cyan-600 group-focus-within:text-cyan-400 transition-colors" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-                <input type="text" id="search-input" placeholder="SEARCH_QUERY... [ Ctrl + F ]" 
-                    class="w-full p-2 pl-10 bg-[#010612] border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-500 neon-border transition-colors font-mono text-sm relative">
-            </div>
-
-            <div id="loading-msg" class="text-cyan-600 animate-pulse">Установка соединения с сервером...</div>
-            
-            <ul id="word-list" class="flex flex-col gap-2 overflow-hidden">
-            </ul>
-        </div>
-    </div>
-
-    <!-- Модальне вікно для карток -->
-    <div id="modal" class="fixed inset-0 bg-[#010612] bg-opacity-95 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
-        <div class="absolute top-4 left-4 text-xs text-cyan-700 pointer-events-none">SYSTEM OVERRIDE // ACTIVE</div>
-        <div class="absolute bottom-4 right-4 text-xs text-cyan-700 pointer-events-none">MEMORY SECTOR 7G</div>
-        <button id="close-modal" class="absolute top-6 right-6 text-cyan-500 text-4xl hover:text-cyan-300 hover:scale-110 transition-transform">&times;</button>
-        
-        <div class="text-cyan-500 mb-6 text-lg tracking-widest uppercase border-b border-cyan-800 pb-1">
-            Блок <span id="current-card-num" class="text-cyan-200">1</span> // <span id="total-cards-num" class="text-cyan-700">10</span>
-        </div>
-
-        <div id="flashcard" class="w-full max-w-md h-72 perspective-1000 cursor-pointer relative">
-            <div class="card-inner relative w-full h-full transform-style-3d">
-                <div class="absolute w-full h-full backface-hidden bg-[#041124] border-2 border-cyan-500 flex flex-col justify-center items-center p-6 text-center neon-border shadow-[0_0_30px_rgba(6,182,212,0.2)]">
-                    <div class="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
-                    <div class="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
-                    <span class="text-5xl font-bold text-cyan-200 tracking-wider" id="card-eng"></span>
-                    <span class="text-xl text-cyan-500 mt-4 font-mono" id="card-trans"></span>
-                    <div class="absolute bottom-6 w-full text-center">
-                        <span class="text-xs text-cyan-700 uppercase animate-pulse">[ Клик для дешифровки ]</span>
+                <div
+                    class="flex flex-col items-center justify-center mb-8 glitch-container"
+                >
+                    <img
+                        src="samurai.png"
+                        alt="Samurai Logo"
+                        class="w-40 h-40 object-contain glitch-img"
+                        onerror="
+                            this.onerror = null;
+                            this.src =
+                                'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'none\' stroke=\'%2306b6d4\' stroke-width=\'4\' stroke-dasharray=\'10,5\'/></svg>';
+                        "
+                    />
+                    <div
+                        class="mt-4 text-4xl font-bold tracking-[0.4em] glitch-text"
+                        data-text="SAMURAI"
+                    >
+                        SAMURAI
                     </div>
                 </div>
-                <div class="absolute w-full h-full backface-hidden bg-cyan-900 border-2 border-cyan-400 flex flex-col justify-center items-center p-6 text-center rotate-y-180 neon-border shadow-[0_0_30px_rgba(6,182,212,0.4)]">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-cyan-400"></div>
-                    <span class="text-4xl font-bold text-[#010612] uppercase tracking-wider bg-cyan-400 px-4 py-2" id="card-ukr"></span>
+
+                <div
+                    class="border-2 border-cyan-700 p-6 bg-[#041124] bg-opacity-70 relative shadow-[0_0_20px_rgba(6,182,212,0.25)]"
+                >
+                    <div
+                        class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"
+                    ></div>
+                    <div
+                        class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400"
+                    ></div>
+
+                    <h1
+                        class="text-xl font-bold text-cyan-400 mb-4 uppercase tracking-widest"
+                    >
+                        > SYNAPSE BOOT SEQUENCE...
+                    </h1>
+
+                    <div
+                        id="boot-log"
+                        class="text-sm text-cyan-300 h-24 overflow-hidden flex flex-col justify-end mb-4 border-l border-cyan-800 pl-4 space-y-1 opacity-90"
+                    ></div>
+
+                    <div
+                        class="w-full h-6 border border-cyan-700 bg-black p-1 relative"
+                    >
+                        <div
+                            id="boot-progress"
+                            class="h-full bg-cyan-500 w-0 transition-all duration-[200ms] ease-out shadow-[0_0_15px_rgba(6,182,212,0.9)]"
+                        ></div>
+                        <div
+                            class="absolute inset-0 flex justify-center items-center text-xs font-bold text-white mix-blend-difference tracking-widest"
+                            id="boot-percent"
+                        >
+                            0%
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex justify-between mt-2 text-xs text-cyan-600"
+                    >
+                        <span>MEMORY_BANK // SECTOR_4</span>
+                        <span>TARGET: LEXICON_DB</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="flex gap-4 mt-10">
-            <button id="prev-btn" class="bg-black border border-cyan-600 text-cyan-500 uppercase tracking-widest py-2 px-6 hover:bg-cyan-900 transition-colors"><< Назад</button>
-            <button id="shuffle-btn" class="bg-cyan-950 border border-yellow-500 text-yellow-500 uppercase tracking-widest py-2 px-6 hover:bg-yellow-500 hover:text-black transition-colors shadow-[0_0_10px_rgba(234,179,8,0.2)]">Перемешать</button>
-            <button id="next-btn" class="bg-black border border-cyan-600 text-cyan-500 uppercase tracking-widest py-2 px-6 hover:bg-cyan-900 transition-colors">Вперед >></button>
-        </div>
-    </div>
-
-    <!-- Модальне вікно редагування (НОВЕ) -->
-    <div id="edit-modal" class="fixed inset-0 bg-[#010612] bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
-        <div class="border-2 border-yellow-500 bg-[#041124] p-6 max-w-sm w-full relative shadow-[0_0_25px_rgba(234,179,8,0.3)]">
-            <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-yellow-500"></div>
-            <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-yellow-500"></div>
-            
-            <h2 class="text-yellow-500 font-bold tracking-widest uppercase mb-4 text-lg text-center">> РЕДАКТИРОВАНИЕ ДАННЫХ</h2>
-            
-            <form id="edit-word-form" class="flex flex-col gap-3">
-                <input type="hidden" id="edit-word-id">
-                
-                <label class="text-cyan-700 text-xs uppercase tracking-widest">ENG_DATA:</label>
-                <input type="text" id="edit-eng-input" required class="p-2 mb-2 bg-black border border-cyan-900 text-cyan-200 focus:outline-none focus:border-yellow-500 neon-border transition-colors font-mono">
-                
-                <label class="text-cyan-700 text-xs uppercase tracking-widest">PHONETICS:</label>
-                <input type="text" id="edit-trans-input" class="p-2 mb-2 bg-black border border-cyan-900 text-cyan-200 focus:outline-none focus:border-yellow-500 neon-border transition-colors font-mono">
-                
-                <label class="text-cyan-700 text-xs uppercase tracking-widest">RU_DATA:</label>
-                <input type="text" id="edit-ukr-input" required class="p-2 mb-2 bg-black border border-cyan-900 text-cyan-200 focus:outline-none focus:border-yellow-500 neon-border transition-colors font-mono">
-                
-                <div class="flex justify-center gap-4 mt-2">
-                    <button type="button" id="cancel-edit" class="bg-black border border-cyan-600 text-cyan-400 uppercase tracking-widest py-2 px-5 hover:bg-cyan-950 transition-colors text-sm">Отмена</button>
-                    <button type="submit" id="save-edit" class="bg-yellow-950 border border-yellow-500 text-yellow-400 uppercase tracking-widest py-2 px-5 hover:bg-yellow-600 hover:text-black transition-colors text-sm shadow-[0_0_10px_rgba(234,179,8,0.3)]">Сохранить</button>
+        <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
+        <div
+            id="main-app"
+            class="w-full max-w-2xl flex flex-col gap-6 opacity-0 transition-opacity duration-1000 z-10 relative mt-4"
+        >
+            <div
+                class="flex justify-between items-end border-b-2 border-cyan-600 pb-2 mb-2"
+            >
+                <div>
+                    <div
+                        class="text-xs text-cyan-600 tracking-widest uppercase"
+                    >
+                        SYS.ADMIN // ACCESS GRANTED
+                    </div>
+                    <h1
+                        class="text-4xl tracking-[0.2em] font-bold text-cyan-400 mt-1"
+                    >
+                        SAMURAI
+                    </h1>
                 </div>
-            </form>
-        </div>
-    </div>
+                <div class="text-right hidden sm:block">
+                    <div class="text-xs text-cyan-600">STATUS: ONLINE</div>
+                    <div class="text-sm tracking-wider text-cyan-500">
+                        ROOT@SYNAPSE:~#
+                    </div>
+                </div>
+            </div>
 
-    <!-- Модальне вікно підтвердження видалення -->
-    <div id="delete-modal" class="fixed inset-0 bg-[#010612] bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
-        <div class="border-2 border-red-500 bg-[#041124] p-6 max-w-sm w-full relative shadow-[0_0_25px_rgba(255,0,60,0.4)] text-center">
-            <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-red-500"></div>
-            <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-red-500"></div>
-            
-            <div class="text-red-500 font-bold tracking-widest uppercase mb-2 text-lg">! ВНИМАНИЕ !</div>
-            <p class="text-cyan-300 text-sm mb-6 font-mono">Вы действительно хотите стереть эту запись из базы данных?</p>
-            
-            <div class="flex justify-center gap-4">
-                <button id="cancel-delete" class="bg-black border border-cyan-600 text-cyan-400 uppercase tracking-widest py-2 px-5 hover:bg-cyan-950 transition-colors text-sm">Отмена</button>
-                <button id="confirm-delete" class="bg-red-950 border border-red-500 text-red-400 uppercase tracking-widest py-2 px-5 hover:bg-red-600 hover:text-white transition-colors text-sm shadow-[0_0_10px_rgba(255,0,60,0.3)]">Удалить</button>
+            <div
+                class="bg-[#041124] bg-opacity-80 border border-cyan-800 p-6 relative neon-border backdrop-blur-sm"
+            >
+                <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-400"></div>
+                <div
+                    class="absolute bottom-0 right-0 w-2 h-2 bg-cyan-400"
+                ></div>
+
+                <h2
+                    class="text-lg tracking-widest mb-4 uppercase text-cyan-300"
+                >
+                    > Инициализация новой записи
+                </h2>
+                <form id="add-word-form" class="flex flex-col gap-4">
+                    <input
+                        type="text"
+                        id="eng-input"
+                        placeholder="PO_DATA (e.g. Vulnerability)"
+                        required
+                        class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors"
+                    />
+
+                    <input
+                        type="text"
+                        id="trans-input"
+                        placeholder="PHONETICS (optional)"
+                        class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors"
+                    />
+
+                    <input
+                        type="text"
+                        id="ukr-input"
+                        placeholder="RU_DATA (e.g. Уязвимость)"
+                        required
+                        class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors"
+                    />
+
+                    <button
+                        type="submit"
+                        id="submit-btn"
+                        class="mt-2 bg-cyan-950 border-2 border-cyan-600 text-cyan-300 font-bold uppercase tracking-widest p-3 hover:bg-cyan-500 hover:text-black transition-all"
+                    >
+                        [ Загрузить в базу ]
+                    </button>
+                </form>
+            </div>
+
+            <div class="flex justify-center my-2">
+                <button
+                    id="practice-btn"
+                    class="bg-[#020b1a] border-2 border-green-500 text-green-400 font-bold tracking-widest py-3 px-10 hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:shadow-[0_0_25px_rgba(34,197,94,0.7)] uppercase flex items-center gap-2"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                    </svg>
+                    Запуск симуляции
+                </button>
+            </div>
+
+            <div
+                class="bg-[#041124] bg-opacity-80 border border-cyan-800 p-6 relative neon-border mb-10 backdrop-blur-sm"
+            >
+                <div
+                    class="flex justify-between items-center mb-4 border-b border-cyan-900 pb-2"
+                >
+                    <h2 class="text-lg tracking-widest uppercase text-cyan-300">
+                        > База данных
+                    </h2>
+                    <div class="text-sm text-cyan-600">
+                        RECORDS:
+                        <span id="word-count" class="text-cyan-300">0</span>
+                    </div>
+                </div>
+
+                <!-- Пошук по базі -->
+                <div class="mb-4 relative group">
+                    <div
+                        class="absolute top-0 left-0 w-1 h-1 bg-cyan-500 z-10"
+                    ></div>
+                    <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                    >
+                        <svg
+                            class="w-4 h-4 text-cyan-600 group-focus-within:text-cyan-400 transition-colors"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="square"
+                                stroke-linejoin="miter"
+                                stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="SEARCH_QUERY... [ Ctrl + F ]"
+                        class="w-full p-2 pl-10 bg-[#010612] border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-500 neon-border transition-colors font-mono text-sm relative"
+                    />
+                </div>
+
+                <div id="loading-msg" class="text-cyan-600 animate-pulse">
+                    Установка соединения с сервером...
+                </div>
+
+                <ul
+                    id="word-list"
+                    class="flex flex-col gap-2 overflow-hidden"
+                ></ul>
             </div>
         </div>
-    </div>
 
-    <!-- Модальне вікно дубліката -->
-    <div id="duplicate-modal" class="fixed inset-0 bg-[#010612] bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md">
-        <div class="border-2 border-cyan-500 bg-[#041124] p-6 max-w-sm w-full relative shadow-[0_0_25px_rgba(6,182,212,0.4)] text-center">
-            <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
-            <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
-            
-            <div class="text-cyan-400 font-bold tracking-widest uppercase mb-2 text-lg">! SYNAPSE WARNING !</div>
-            <p class="text-cyan-300 text-sm mb-6 font-mono">Такое слово уже добавлено в базу данных.</p>
-            
-            <div class="flex justify-center">
-                <button id="close-duplicate-modal" class="bg-cyan-950 border border-cyan-500 text-cyan-300 uppercase tracking-widest py-2 px-6 hover:bg-cyan-500 hover:text-black transition-colors text-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">OK</button>
+        <!-- Модальне вікно для карток -->
+        <div
+            id="modal"
+            class="fixed inset-0 bg-[#010612] bg-opacity-95 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md"
+        >
+            <div
+                class="absolute top-4 left-4 text-xs text-cyan-700 pointer-events-none"
+            >
+                SYSTEM OVERRIDE // ACTIVE
+            </div>
+            <div
+                class="absolute bottom-4 right-4 text-xs text-cyan-700 pointer-events-none"
+            >
+                MEMORY SECTOR 7G
+            </div>
+            <button
+                id="close-modal"
+                class="absolute top-6 right-6 text-cyan-500 text-4xl hover:text-cyan-300 hover:scale-110 transition-transform"
+            >
+                &times;
+            </button>
+
+            <div
+                class="text-cyan-500 mb-6 text-lg tracking-widest uppercase border-b border-cyan-800 pb-1"
+            >
+                Блок
+                <span id="current-card-num" class="text-cyan-200">1</span> //
+                <span id="total-cards-num" class="text-cyan-700">10</span>
+            </div>
+
+            <div
+                id="flashcard"
+                class="w-full max-w-md h-72 perspective-1000 cursor-pointer relative"
+            >
+                <div
+                    class="card-inner relative w-full h-full transform-style-3d"
+                >
+                    <div
+                        class="absolute w-full h-full backface-hidden bg-[#041124] border-2 border-cyan-500 flex flex-col justify-center items-center p-6 text-center neon-border shadow-[0_0_30px_rgba(6,182,212,0.2)]"
+                    >
+                        <div
+                            class="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"
+                        ></div>
+                        <div
+                            class="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400"
+                        ></div>
+                        <span
+                            class="text-5xl font-bold text-cyan-200 tracking-wider"
+                            id="card-eng"
+                        ></span>
+                        <span
+                            class="text-xl text-cyan-500 mt-4 font-mono"
+                            id="card-trans"
+                        ></span>
+                        <div class="absolute bottom-6 w-full text-center">
+                            <span
+                                class="text-xs text-cyan-700 uppercase animate-pulse"
+                                >[ Клик для дешифровки ]</span
+                            >
+                        </div>
+                    </div>
+                    <div
+                        class="absolute w-full h-full backface-hidden bg-cyan-900 border-2 border-cyan-400 flex flex-col justify-center items-center p-6 text-center rotate-y-180 neon-border shadow-[0_0_30px_rgba(6,182,212,0.4)]"
+                    >
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-cyan-400"
+                        ></div>
+                        <span
+                            class="text-4xl font-bold text-[#010612] uppercase tracking-wider bg-cyan-400 px-4 py-2"
+                            id="card-ukr"
+                        ></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-10">
+                <button
+                    id="prev-btn"
+                    class="bg-black border border-cyan-600 text-cyan-500 uppercase tracking-widest py-2 px-6 hover:bg-cyan-900 transition-colors"
+                >
+                    << Назад
+                </button>
+                <button
+                    id="shuffle-btn"
+                    class="bg-cyan-950 border border-yellow-500 text-yellow-500 uppercase tracking-widest py-2 px-6 hover:bg-yellow-500 hover:text-black transition-colors shadow-[0_0_10px_rgba(234,179,8,0.2)]"
+                >
+                    Перемешать
+                </button>
+                <button
+                    id="next-btn"
+                    class="bg-black border border-cyan-600 text-cyan-500 uppercase tracking-widest py-2 px-6 hover:bg-cyan-900 transition-colors"
+                >
+                    Вперед >>
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Firebase та Логіка -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        // Добавлено updateDoc в импорты
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, serverTimestamp, orderBy, query } 
-            from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        <!-- Модальне вікно редагування (НОВЕ) -->
+        <div
+            id="edit-modal"
+            class="fixed inset-0 bg-[#010612] bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md"
+        >
+            <div
+                class="border-2 border-yellow-500 bg-[#041124] p-6 max-w-sm w-full relative shadow-[0_0_25px_rgba(234,179,8,0.3)]"
+            >
+                <div
+                    class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-yellow-500"
+                ></div>
+                <div
+                    class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-yellow-500"
+                ></div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAtcJLMY9jIiKpOCK-qR3euD3ToUoH5AWY",
-            authDomain: "dictionary-4d165.firebaseapp.com",
-            projectId: "dictionary-4d165",
-            storageBucket: "dictionary-4d165.firebasestorage.app",
-            messagingSenderId: "619512208362",
-            appId: "1:619512208362:web:f3990b11cea9d9432df093"
-        };
+                <h2
+                    class="text-yellow-500 font-bold tracking-widest uppercase mb-4 text-lg text-center"
+                >
+                    > РЕДАКТИРОВАНИЕ ДАННЫХ
+                </h2>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+                <form id="edit-word-form" class="flex flex-col gap-3">
+                    <input type="hidden" id="edit-word-id" />
 
-        // --- ЛОГИКА ЭКРАНА ЗАГРУЗКИ ---
-        const bootScreen = document.getElementById('boot-screen');
-        const mainApp = document.getElementById('main-app');
-        const bootLog = document.getElementById('boot-log');
-        const bootProgress = document.getElementById('boot-progress');
-        const bootPercent = document.getElementById('boot-percent');
+                    <label
+                        class="text-cyan-700 text-xs uppercase tracking-widest"
+                        >ENG_DATA:</label
+                    >
+                    <input
+                        type="text"
+                        id="edit-eng-input"
+                        required
+                        class="p-2 mb-2 bg-black border border-cyan-900 text-cyan-200 focus:outline-none focus:border-yellow-500 neon-border transition-colors font-mono"
+                    />
 
-        const logLines = [
-            "> MOUNTING LEXICON DRIVE...",
-            "> BYPASSING MAINFIREWALL...",
-            "> OVERRIDING SUBSYSTEMS [OK]",
-            "> EXTRACTING NEURAL DATA...",
-            "> COMPILING SYNAPSE INTERFACE...",
-            "> BREACH COMPLETE."
-        ];
+                    <label
+                        class="text-cyan-700 text-xs uppercase tracking-widest"
+                        >PHONETICS:</label
+                    >
+                    <input
+                        type="text"
+                        id="edit-trans-input"
+                        class="p-2 mb-2 bg-black border border-cyan-900 text-cyan-200 focus:outline-none focus:border-yellow-500 neon-border transition-colors font-mono"
+                    />
 
-        let currentLine = 0;
-        let progress = 0;
+                    <label
+                        class="text-cyan-700 text-xs uppercase tracking-widest"
+                        >RU_DATA:</label
+                    >
+                    <input
+                        type="text"
+                        id="edit-ukr-input"
+                        required
+                        class="p-2 mb-2 bg-black border border-cyan-900 text-cyan-200 focus:outline-none focus:border-yellow-500 neon-border transition-colors font-mono"
+                    />
 
-        const logInterval = setInterval(() => {
-            if (currentLine < logLines.length) {
-                const p = document.createElement('div');
-                p.innerText = logLines[currentLine];
-                bootLog.appendChild(p);
-                currentLine++;
+                    <div class="flex justify-center gap-4 mt-2">
+                        <button
+                            type="button"
+                            id="cancel-edit"
+                            class="bg-black border border-cyan-600 text-cyan-400 uppercase tracking-widest py-2 px-5 hover:bg-cyan-950 transition-colors text-sm"
+                        >
+                            Отмена
+                        </button>
+                        <button
+                            type="submit"
+                            id="save-edit"
+                            class="bg-yellow-950 border border-yellow-500 text-yellow-400 uppercase tracking-widest py-2 px-5 hover:bg-yellow-600 hover:text-black transition-colors text-sm shadow-[0_0_10px_rgba(234,179,8,0.3)]"
+                        >
+                            Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальне вікно підтвердження видалення -->
+        <div
+            id="delete-modal"
+            class="fixed inset-0 bg-[#010612] bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md"
+        >
+            <div
+                class="border-2 border-red-500 bg-[#041124] p-6 max-w-sm w-full relative shadow-[0_0_25px_rgba(255,0,60,0.4)] text-center"
+            >
+                <div
+                    class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-red-500"
+                ></div>
+                <div
+                    class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-red-500"
+                ></div>
+
+                <div
+                    class="text-red-500 font-bold tracking-widest uppercase mb-2 text-lg"
+                >
+                    ! ВНИМАНИЕ !
+                </div>
+                <p class="text-cyan-300 text-sm mb-6 font-mono">
+                    Вы действительно хотите стереть эту запись из базы данных?
+                </p>
+
+                <div class="flex justify-center gap-4">
+                    <button
+                        id="cancel-delete"
+                        class="bg-black border border-cyan-600 text-cyan-400 uppercase tracking-widest py-2 px-5 hover:bg-cyan-950 transition-colors text-sm"
+                    >
+                        Отмена
+                    </button>
+                    <button
+                        id="confirm-delete"
+                        class="bg-red-950 border border-red-500 text-red-400 uppercase tracking-widest py-2 px-5 hover:bg-red-600 hover:text-white transition-colors text-sm shadow-[0_0_10px_rgba(255,0,60,0.3)]"
+                    >
+                        Удалить
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальне вікно дубліката -->
+        <div
+            id="duplicate-modal"
+            class="fixed inset-0 bg-[#010612] bg-opacity-90 hidden flex-col justify-center items-center p-4 z-50 backdrop-blur-md"
+        >
+            <div
+                class="border-2 border-cyan-500 bg-[#041124] p-6 max-w-sm w-full relative shadow-[0_0_25px_rgba(6,182,212,0.4)] text-center"
+            >
+                <div
+                    class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cyan-400"
+                ></div>
+                <div
+                    class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-cyan-400"
+                ></div>
+
+                <div
+                    class="text-cyan-400 font-bold tracking-widest uppercase mb-2 text-lg"
+                >
+                    ! SYNAPSE WARNING !
+                </div>
+                <p class="text-cyan-300 text-sm mb-6 font-mono">
+                    Такое слово уже добавлено в базу данных.
+                </p>
+
+                <div class="flex justify-center">
+                    <button
+                        id="close-duplicate-modal"
+                        class="bg-cyan-950 border border-cyan-500 text-cyan-300 uppercase tracking-widest py-2 px-6 hover:bg-cyan-500 hover:text-black transition-colors text-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                    >
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firebase та Логіка -->
+        <script type="module">
+            import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js';
+            // Добавлено updateDoc в импорты
+            import {
+                getFirestore,
+                collection,
+                addDoc,
+                getDocs,
+                deleteDoc,
+                doc,
+                updateDoc,
+                serverTimestamp,
+                orderBy,
+                query,
+            } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js';
+
+            const firebaseConfig = {
+                apiKey: 'AIzaSyAtcJLMY9jIiKpOCK-qR3euD3ToUoH5AWY',
+                authDomain: 'dictionary-4d165.firebaseapp.com',
+                projectId: 'dictionary-4d165',
+                storageBucket: 'dictionary-4d165.firebasestorage.app',
+                messagingSenderId: '619512208362',
+                appId: '1:619512208362:web:f3990b11cea9d9432df093',
+            };
+
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+
+            // --- ЛОГИКА ЭКРАНА ЗАГРУЗКИ ---
+            const bootScreen = document.getElementById('boot-screen');
+            const mainApp = document.getElementById('main-app');
+            const bootLog = document.getElementById('boot-log');
+            const bootProgress = document.getElementById('boot-progress');
+            const bootPercent = document.getElementById('boot-percent');
+
+            const logLines = [
+                '> MOUNTING LEXICON DRIVE...',
+                '> BYPASSING MAINFIREWALL...',
+                '> OVERRIDING SUBSYSTEMS [OK]',
+                '> EXTRACTING NEURAL DATA...',
+                '> COMPILING SYNAPSE INTERFACE...',
+                '> BREACH COMPLETE.',
+            ];
+
+            let currentLine = 0;
+            let progress = 0;
+
+            const logInterval = setInterval(() => {
+                if (currentLine < logLines.length) {
+                    const p = document.createElement('div');
+                    p.innerText = logLines[currentLine];
+                    bootLog.appendChild(p);
+                    currentLine++;
+                }
+            }, 400);
+
+            const progInterval = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5;
+                if (progress > 100) progress = 100;
+
+                bootProgress.style.width = progress + '%';
+                bootPercent.innerText = progress + '%';
+
+                if (progress === 100) {
+                    clearInterval(progInterval);
+                    clearInterval(logInterval);
+
+                    setTimeout(() => {
+                        bootScreen.style.transition =
+                            'opacity 0.6s ease-out, transform 0.6s ease-out';
+                        bootScreen.style.opacity = '0';
+                        bootScreen.style.transform = 'scale(1.05)';
+
+                        mainApp.style.opacity = '1';
+
+                        setTimeout(() => bootScreen.remove(), 600);
+                    }, 800);
+                }
+            }, 250);
+
+            // --- ОСНОВНАЯ ЛОГИКА ПРИЛОЖЕНИЯ ---
+            let words = [];
+            let practiceWords = [];
+            let currentCardIndex = 0;
+
+            const form = document.getElementById('add-word-form');
+            const engInput = document.getElementById('eng-input');
+            const transInput = document.getElementById('trans-input');
+            const ukrInput = document.getElementById('ukr-input');
+            const wordList = document.getElementById('word-list');
+            const wordCount = document.getElementById('word-count');
+            const loadingMsg = document.getElementById('loading-msg');
+            const submitBtn = document.getElementById('submit-btn');
+
+            const modal = document.getElementById('modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const practiceBtn = document.getElementById('practice-btn');
+            const flashcard = document.getElementById('flashcard');
+            const cardEng = document.getElementById('card-eng');
+            const cardTrans = document.getElementById('card-trans');
+            const cardUkr = document.getElementById('card-ukr');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const shuffleBtn = document.getElementById('shuffle-btn');
+            const currentNum = document.getElementById('current-card-num');
+            const totalNum = document.getElementById('total-cards-num');
+
+            // Элементы модального окна удаления
+            const deleteModal = document.getElementById('delete-modal');
+            const cancelDeleteBtn = document.getElementById('cancel-delete');
+            const confirmDeleteBtn = document.getElementById('confirm-delete');
+            let wordToDeleteId = null;
+
+            // Элементы модального окна редактирования
+            const editModal = document.getElementById('edit-modal');
+            const editForm = document.getElementById('edit-word-form');
+            const editEngInput = document.getElementById('edit-eng-input');
+            const editTransInput = document.getElementById('edit-trans-input');
+            const editUkrInput = document.getElementById('edit-ukr-input');
+            const editIdInput = document.getElementById('edit-word-id');
+            const cancelEditBtn = document.getElementById('cancel-edit');
+            const saveEditBtn = document.getElementById('save-edit');
+
+            // Элементы модального окна дубликатов
+            const duplicateModal = document.getElementById('duplicate-modal');
+            const closeDuplicateModalBtn = document.getElementById(
+                'close-duplicate-modal',
+            );
+
+            // Пошук
+            const searchInput = document.getElementById('search-input');
+
+            async function loadWords() {
+                words = [];
+                try {
+                    const q = query(
+                        collection(db, 'words'),
+                        orderBy('createdAt', 'desc'),
+                    );
+                    const querySnapshot = await getDocs(q);
+                    querySnapshot.forEach((doc) => {
+                        words.push({ id: doc.id, ...doc.data() });
+                    });
+                    loadingMsg.style.display = 'none';
+                    renderList();
+                } catch (error) {
+                    console.error('Помилка завантаження:', error);
+                    loadingMsg.innerText =
+                        '[ERROR] Збій підключення до бази даних.';
+                    loadingMsg.classList.replace(
+                        'text-cyan-600',
+                        'text-red-500',
+                    );
+                }
             }
-        }, 400);
 
-        const progInterval = setInterval(() => {
-            progress += Math.floor(Math.random() * 15) + 5;
-            if (progress > 100) progress = 100;
-            
-            bootProgress.style.width = progress + '%';
-            bootPercent.innerText = progress + '%';
+            function renderList(newWordId = null) {
+                wordList.innerHTML = '';
+                wordCount.innerText = words.length;
 
-            if (progress === 100) {
-                clearInterval(progInterval);
-                clearInterval(logInterval);
-                
-                setTimeout(() => {
-                    bootScreen.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-                    bootScreen.style.opacity = '0';
-                    bootScreen.style.transform = 'scale(1.05)'; 
-                    
-                    mainApp.style.opacity = '1';
-                    
-                    setTimeout(() => bootScreen.remove(), 600);
-                }, 800);
-            }
-        }, 250);
+                if (words.length === 0) {
+                    wordList.innerHTML =
+                        '<li id="no-data-msg" class="text-cyan-700 text-center py-4 border border-cyan-900 border-dashed bg-[#020b1a] bg-opacity-50">NO DATA FOUND</li>';
+                    return;
+                }
 
-        // --- ОСНОВНАЯ ЛОГИКА ПРИЛОЖЕНИЯ ---
-        let words = [];
-        let practiceWords = [];
-        let currentCardIndex = 0;
+                words.forEach((word) => {
+                    const isNew = word.id === newWordId;
+                    const li = document.createElement('li');
 
-        const form = document.getElementById('add-word-form');
-        const engInput = document.getElementById('eng-input');
-        const transInput = document.getElementById('trans-input');
-        const ukrInput = document.getElementById('ukr-input');
-        const wordList = document.getElementById('word-list');
-        const wordCount = document.getElementById('word-count');
-        const loadingMsg = document.getElementById('loading-msg');
-        const submitBtn = document.getElementById('submit-btn');
+                    li.id = `word-item-${word.id}`;
+                    li.className = `flex items-center justify-between bg-[#020b1a] bg-opacity-80 p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden ${isNew ? 'animate-new-word' : ''}`;
 
-        const modal = document.getElementById('modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const practiceBtn = document.getElementById('practice-btn');
-        const flashcard = document.getElementById('flashcard');
-        const cardEng = document.getElementById('card-eng');
-        const cardTrans = document.getElementById('card-trans');
-        const cardUkr = document.getElementById('card-ukr');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const shuffleBtn = document.getElementById('shuffle-btn');
-        const currentNum = document.getElementById('current-card-num');
-        const totalNum = document.getElementById('total-cards-num');
+                    const transcriptionHtml = word.transcription
+                        ? `<span class="text-cyan-600 font-mono text-sm ml-2 group-hover:text-cyan-400 transition-colors">[${word.transcription}]</span>`
+                        : '';
 
-        // Элементы модального окна удаления
-        const deleteModal = document.getElementById('delete-modal');
-        const cancelDeleteBtn = document.getElementById('cancel-delete');
-        const confirmDeleteBtn = document.getElementById('confirm-delete');
-        let wordToDeleteId = null;
-
-        // Элементы модального окна редактирования
-        const editModal = document.getElementById('edit-modal');
-        const editForm = document.getElementById('edit-word-form');
-        const editEngInput = document.getElementById('edit-eng-input');
-        const editTransInput = document.getElementById('edit-trans-input');
-        const editUkrInput = document.getElementById('edit-ukr-input');
-        const editIdInput = document.getElementById('edit-word-id');
-        const cancelEditBtn = document.getElementById('cancel-edit');
-        const saveEditBtn = document.getElementById('save-edit');
-
-        // Элементы модального окна дубликатов
-        const duplicateModal = document.getElementById('duplicate-modal');
-        const closeDuplicateModalBtn = document.getElementById('close-duplicate-modal');
-
-        // Пошук
-        const searchInput = document.getElementById('search-input');
-
-        async function loadWords() {
-            words = [];
-            try {
-                const q = query(collection(db, "words"), orderBy("createdAt", "desc"));
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                    words.push({ id: doc.id, ...doc.data() });
-                });
-                loadingMsg.style.display = 'none';
-                renderList();
-            } catch (error) {
-                console.error("Помилка завантаження:", error);
-                loadingMsg.innerText = "[ERROR] Збій підключення до бази даних.";
-                loadingMsg.classList.replace("text-cyan-600", "text-red-500");
-            }
-        }
-
-        function renderList(newWordId = null) {
-            wordList.innerHTML = '';
-            wordCount.innerText = words.length;
-
-            if (words.length === 0) {
-                wordList.innerHTML = '<li id="no-data-msg" class="text-cyan-700 text-center py-4 border border-cyan-900 border-dashed bg-[#020b1a] bg-opacity-50">NO DATA FOUND</li>';
-                return;
-            }
-
-            words.forEach((word) => {
-                const isNew = word.id === newWordId;
-                const li = document.createElement('li');
-                
-                li.id = `word-item-${word.id}`;
-                li.className = `flex items-center justify-between bg-[#020b1a] bg-opacity-80 p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden ${isNew ? 'animate-new-word' : ''}`;
-                
-                const transcriptionHtml = word.transcription ? `<span class="text-cyan-600 font-mono text-sm ml-2 group-hover:text-cyan-400 transition-colors">[${word.transcription}]</span>` : '';
-                
-                li.innerHTML = `
-                    <div class="flex items-center w-full">
-                        <div class="flex flex-shrink-0 mr-3">
+                    // Оновлена структура HTML для перенесення кнопок вправо
+                    li.innerHTML = `
+                    <div class="flex items-center justify-between w-full">
+                        <div class="flex-grow flex flex-col md:flex-row md:items-baseline gap-1">
+                            <div>
+                                <span class="font-bold text-lg text-cyan-200 group-hover:text-white transition-colors">${word.english}</span>
+                                ${transcriptionHtml}
+                            </div>
+                            <div class="text-cyan-500 uppercase text-sm md:ml-4">${word.ukrainian}</div>
+                        </div>
+                        <div class="flex flex-shrink-0 ml-3">
                             <button class="edit-btn text-cyan-800 hover:text-yellow-500 p-2 transition-colors" data-id="${word.id}" title="Редактировать">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -550,342 +1052,381 @@
                                 </svg>
                             </button>
                         </div>
-                        <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-1 items-baseline">
-                            <div>
-                                <span class="font-bold text-lg text-cyan-200 group-hover:text-white transition-colors">${word.english}</span>
-                                ${transcriptionHtml}
-                            </div>
-                            <div class="text-cyan-500 uppercase text-sm md:text-right">${word.ukrainian}</div>
-                        </div>
                     </div>
                 `;
-                wordList.appendChild(li);
-            });
-
-            // Обработчики для удаления
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const btnElement = e.target.closest('.delete-btn');
-                    wordToDeleteId = btnElement.getAttribute('data-id');
-                    deleteModal.classList.remove('hidden');
-                    deleteModal.classList.add('flex');
+                    wordList.appendChild(li);
                 });
-            });
 
-            // Обработчики для редактирования
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const btnElement = e.target.closest('.edit-btn');
-                    const id = btnElement.getAttribute('data-id');
-                    const wordToEdit = words.find(w => w.id === id);
-                    
-                    if(wordToEdit) {
-                        editIdInput.value = wordToEdit.id;
-                        editEngInput.value = wordToEdit.english;
-                        editTransInput.value = wordToEdit.transcription || '';
-                        editUkrInput.value = wordToEdit.ukrainian;
-                        
-                        editModal.classList.remove('hidden');
-                        editModal.classList.add('flex');
+                // Обработчики для удаления
+                document.querySelectorAll('.delete-btn').forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                        const btnElement = e.target.closest('.delete-btn');
+                        wordToDeleteId = btnElement.getAttribute('data-id');
+                        deleteModal.classList.remove('hidden');
+                        deleteModal.classList.add('flex');
+                    });
+                });
+
+                // Обработчики для редактирования
+                document.querySelectorAll('.edit-btn').forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                        const btnElement = e.target.closest('.edit-btn');
+                        const id = btnElement.getAttribute('data-id');
+                        const wordToEdit = words.find((w) => w.id === id);
+
+                        if (wordToEdit) {
+                            editIdInput.value = wordToEdit.id;
+                            editEngInput.value = wordToEdit.english;
+                            editTransInput.value =
+                                wordToEdit.transcription || '';
+                            editUkrInput.value = wordToEdit.ukrainian;
+
+                            editModal.classList.remove('hidden');
+                            editModal.classList.add('flex');
+                        }
+                    });
+                });
+
+                // Якщо є текст у пошуку - застосовуємо його до нового списку
+                if (searchInput.value.trim() !== '') {
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            }
+
+            // Обробник пошуку
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const listItems = wordList.querySelectorAll(
+                    'li:not(#no-results-msg):not(#no-data-msg)',
+                );
+                let hasVisibleItems = false;
+
+                listItems.forEach((li) => {
+                    const text = li.innerText.toLowerCase();
+                    if (text.includes(query)) {
+                        li.style.display = 'flex';
+                        hasVisibleItems = true;
+                    } else {
+                        li.style.display = 'none';
                     }
                 });
-            });
 
-            // Якщо є текст у пошуку - застосовуємо його до нового списку
-            if (searchInput.value.trim() !== '') {
-                searchInput.dispatchEvent(new Event('input'));
-            }
-        }
+                // Повідомлення про відсутність результатів пошуку
+                let noResultsMsg = document.getElementById('no-results-msg');
 
-        // Обробник пошуку
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const listItems = wordList.querySelectorAll('li:not(#no-results-msg):not(#no-data-msg)');
-            let hasVisibleItems = false;
-            
-            listItems.forEach(li => {
-                const text = li.innerText.toLowerCase();
-                if (text.includes(query)) {
-                    li.style.display = 'flex';
-                    hasVisibleItems = true;
-                } else {
-                    li.style.display = 'none';
+                if (!hasVisibleItems && listItems.length > 0) {
+                    if (!noResultsMsg) {
+                        noResultsMsg = document.createElement('li');
+                        noResultsMsg.id = 'no-results-msg';
+                        noResultsMsg.className =
+                            'text-red-500 text-center py-4 border border-red-900 border-dashed bg-[#020b1a] bg-opacity-50 font-mono tracking-widest uppercase shadow-[inset_0_0_10px_rgba(255,0,60,0.2)] animate-pulse';
+                        noResultsMsg.innerText =
+                            '[ ⚠️ ТАКОГО СЛОВА НЕТ В БАЗЕ ДАННЫХ ]';
+                        wordList.appendChild(noResultsMsg);
+                    }
+                    noResultsMsg.style.display = 'block';
+                } else if (noResultsMsg) {
+                    noResultsMsg.style.display = 'none';
                 }
             });
 
-            // Повідомлення про відсутність результатів пошуку
-            let noResultsMsg = document.getElementById('no-results-msg');
-            
-            if (!hasVisibleItems && listItems.length > 0) {
-                if (!noResultsMsg) {
-                    noResultsMsg = document.createElement('li');
-                    noResultsMsg.id = 'no-results-msg';
-                    noResultsMsg.className = 'text-red-500 text-center py-4 border border-red-900 border-dashed bg-[#020b1a] bg-opacity-50 font-mono tracking-widest uppercase shadow-[inset_0_0_10px_rgba(255,0,60,0.2)] animate-pulse';
-                    noResultsMsg.innerText = '[ ⚠️ ТАКОГО СЛОВА НЕТ В БАЗЕ ДАННЫХ ]';
-                    wordList.appendChild(noResultsMsg);
-                }
-                noResultsMsg.style.display = 'block';
-            } else if (noResultsMsg) {
-                noResultsMsg.style.display = 'none';
-            }
-        });
-
-        // Логика отмены удаления
-        cancelDeleteBtn.addEventListener('click', () => {
-            wordToDeleteId = null;
-            deleteModal.classList.add('hidden');
-            deleteModal.classList.remove('flex');
-        });
-
-        // Логика подтверждения удаления
-        confirmDeleteBtn.addEventListener('click', async () => {
-            if (!wordToDeleteId) return;
-
-            const listItem = document.getElementById(`word-item-${wordToDeleteId}`);
-            if (listItem) {
-                listItem.classList.add('animate-delete-word');
-            }
-
-            deleteModal.classList.add('hidden');
-            deleteModal.classList.remove('flex');
-
-            setTimeout(async () => {
-                await deleteWordFromDB(wordToDeleteId);
+            // Логика отмены удаления
+            cancelDeleteBtn.addEventListener('click', () => {
                 wordToDeleteId = null;
-            }, 400);
-        });
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+            });
 
-        // Закрытие модального окна дубликатов
-        closeDuplicateModalBtn.addEventListener('click', () => {
-            duplicateModal.classList.add('hidden');
-            duplicateModal.classList.remove('flex');
-        });
+            // Логика подтверждения удаления
+            confirmDeleteBtn.addEventListener('click', async () => {
+                if (!wordToDeleteId) return;
 
-        // Закрытие модального окна редактирования
-        cancelEditBtn.addEventListener('click', () => {
-            editModal.classList.add('hidden');
-            editModal.classList.remove('flex');
-        });
-
-        // Сохранение отредактированного слова
-        editForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const id = editIdInput.value;
-            const eng = editEngInput.value.trim();
-            let trans = editTransInput.value.trim();
-            const ukr = editUkrInput.value.trim();
-
-            if (trans && !trans.startsWith('[')) trans = '[' + trans;
-            if (trans && !trans.endsWith(']')) trans = trans + ']';
-            trans = trans.replace(/\[|\]/g, ''); 
-
-            saveEditBtn.innerText = '[ ПЕРЕДАЧА... ]';
-            saveEditBtn.disabled = true;
-            saveEditBtn.classList.add('animate-pulse');
-
-            try {
-                const wordRef = doc(db, "words", id);
-                await updateDoc(wordRef, {
-                    english: eng,
-                    transcription: trans,
-                    ukrainian: ukr
-                });
-
-                // Обновляем локальный массив
-                const wordIndex = words.findIndex(w => w.id === id);
-                if (wordIndex !== -1) {
-                    words[wordIndex].english = eng;
-                    words[wordIndex].transcription = trans;
-                    words[wordIndex].ukrainian = ukr;
+                const listItem = document.getElementById(
+                    `word-item-${wordToDeleteId}`,
+                );
+                if (listItem) {
+                    listItem.classList.add('animate-delete-word');
                 }
 
-                // Перерисовываем список и закрываем окно
-                renderList(id);
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+
+                setTimeout(async () => {
+                    await deleteWordFromDB(wordToDeleteId);
+                    wordToDeleteId = null;
+                }, 400);
+            });
+
+            // Закрытие модального окна дубликатов
+            closeDuplicateModalBtn.addEventListener('click', () => {
+                duplicateModal.classList.add('hidden');
+                duplicateModal.classList.remove('flex');
+            });
+
+            // Закрытие модального окна редактирования
+            cancelEditBtn.addEventListener('click', () => {
                 editModal.classList.add('hidden');
                 editModal.classList.remove('flex');
+            });
 
-            } catch (error) {
-                console.error("Ошибка обновления:", error);
-                alert("ACCESS DENIED: Ошибка при обновлении записи.");
-            } finally {
-                saveEditBtn.innerText = 'Сохранить';
-                saveEditBtn.disabled = false;
-                saveEditBtn.classList.remove('animate-pulse');
-            }
-        });
+            // Сохранение отредактированного слова
+            editForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-        // Добавление нового слова
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const eng = engInput.value.trim();
-            let trans = transInput.value.trim();
-            const ukr = ukrInput.value.trim();
+                const id = editIdInput.value;
+                const eng = editEngInput.value.trim();
+                let trans = editTransInput.value.trim();
+                const ukr = editUkrInput.value.trim();
 
-            const isDuplicate = words.some(w => w.english.toLowerCase() === eng.toLowerCase());
-            if (isDuplicate) {
-                duplicateModal.classList.remove('hidden');
-                duplicateModal.classList.add('flex');
-                return;
-            }
+                if (trans && !trans.startsWith('[')) trans = '[' + trans;
+                if (trans && !trans.endsWith(']')) trans = trans + ']';
+                trans = trans.replace(/\[|\]/g, '');
 
-            if (trans && !trans.startsWith('[')) trans = '[' + trans;
-            if (trans && !trans.endsWith(']')) trans = trans + ']';
-            trans = trans.replace(/\[|\]/g, ''); 
+                saveEditBtn.innerText = '[ ПЕРЕДАЧА... ]';
+                saveEditBtn.disabled = true;
+                saveEditBtn.classList.add('animate-pulse');
 
-            submitBtn.innerText = '[ ПЕРЕДАЧА ДАННЫХ... ]';
-            submitBtn.disabled = true;
-            submitBtn.classList.add('animate-pulse', 'text-yellow-400', 'border-yellow-400');
+                try {
+                    const wordRef = doc(db, 'words', id);
+                    await updateDoc(wordRef, {
+                        english: eng,
+                        transcription: trans,
+                        ukrainian: ukr,
+                    });
 
-            try {
-                const docRef = await addDoc(collection(db, "words"), {
-                    english: eng,
-                    transcription: trans,
-                    ukrainian: ukr,
-                    createdAt: serverTimestamp()
-                });
-                
-                words.unshift({ id: docRef.id, english: eng, transcription: trans, ukrainian: ukr });
-                
-                renderList(docRef.id); 
-                
-                engInput.value = '';
-                transInput.value = '';
-                ukrInput.value = '';
+                    // Обновляем локальный массив
+                    const wordIndex = words.findIndex((w) => w.id === id);
+                    if (wordIndex !== -1) {
+                        words[wordIndex].english = eng;
+                        words[wordIndex].transcription = trans;
+                        words[wordIndex].ukrainian = ukr;
+                    }
 
-                submitBtn.innerText = '[ ЗАПИСЬ УСПЕШНА ]';
-                submitBtn.classList.remove('animate-pulse', 'text-yellow-400', 'border-yellow-400');
-                submitBtn.classList.add('text-green-400', 'border-green-500', 'shadow-[0_0_15px_rgba(34,197,94,0.5)]');
-                
-                setTimeout(() => {
-                    submitBtn.innerText = '[ Загрузить в базу ]';
-                    submitBtn.classList.remove('text-green-400', 'border-green-500', 'shadow-[0_0_15px_rgba(34,197,94,0.5)]');
-                    submitBtn.disabled = false;
-                }, 1500);
-
-            } catch (error) {
-                console.error("Помилка збереження:", error);
-                alert("ACCESS DENIED: Ошибка записи в БД.");
-                submitBtn.innerText = '[ Загрузить в базу ]';
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('animate-pulse', 'text-yellow-400', 'border-yellow-400');
-            }
-        });
-
-        async function deleteWordFromDB(id) {
-            try {
-                await deleteDoc(doc(db, "words", id));
-                words = words.filter(w => w.id !== id);
-                renderList();
-            } catch (error) {
-                console.error("Помилка видалення:", error);
-            }
-        }
-
-        function shuffleArray(array) {
-            let curId = array.length;
-            while (0 !== curId) {
-                let randId = Math.floor(Math.random() * curId);
-                curId -= 1;
-                let tmp = array[curId];
-                array[curId] = array[randId];
-                array[randId] = tmp;
-            }
-            return array;
-        }
-
-        practiceBtn.addEventListener('click', () => {
-            if (words.length === 0) {
-                alert("БАЗА ПУСТА. ДОБАВЬТЕ ДАННЫЕ.");
-                return;
-            }
-            practiceWords = shuffleArray([...words]);
-            currentCardIndex = 0;
-            updateCard();
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        });
-
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            flashcard.classList.remove('flipped');
-        });
-
-        flashcard.addEventListener('click', () => {
-            flashcard.classList.toggle('flipped');
-        });
-
-        function updateCard() {
-            flashcard.classList.remove('flipped');
-            
-            // Запуск анимации смены карточки
-            flashcard.classList.remove('animate-card-change');
-            void flashcard.offsetWidth;
-            flashcard.classList.add('animate-card-change');
-
-            const word = practiceWords[currentCardIndex];
-            
-            setTimeout(() => {
-                cardEng.innerText = word.english;
-                cardTrans.innerText = word.transcription ? `[${word.transcription}]` : '';
-                cardUkr.innerText = word.ukrainian;
-                currentNum.innerText = currentCardIndex + 1;
-                totalNum.innerText = practiceWords.length;
-            }, 150);
-        }
-
-        nextBtn.addEventListener('click', () => {
-            if (currentCardIndex < practiceWords.length - 1) {
-                currentCardIndex++;
-                updateCard();
-            }
-        });
-
-        prevBtn.addEventListener('click', () => {
-            if (currentCardIndex > 0) {
-                currentCardIndex--;
-                updateCard();
-            }
-        });
-
-        // Глобальні перехоплення клавіатури
-        document.addEventListener('keydown', (e) => {
-            // Перехоплення Ctrl+F (або Cmd+F на Mac) для фокусу на нашому пошуку
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
-                e.preventDefault(); 
-                searchInput.focus();
-                // Прокрутка до рядка пошуку, якщо він поза екраном
-                searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-
-            if (!modal.classList.contains('hidden')) {
-                if (e.key === 'ArrowRight') nextBtn.click();
-                if (e.key === 'ArrowLeft') prevBtn.click();
-                if (e.key === ' ' || e.key === 'Enter') {
-                    e.preventDefault();
-                    flashcard.click();
+                    // Перерисовываем список и закрываем окно
+                    renderList(id);
+                    editModal.classList.add('hidden');
+                    editModal.classList.remove('flex');
+                } catch (error) {
+                    console.error('Ошибка обновления:', error);
+                    alert('ACCESS DENIED: Ошибка при обновлении записи.');
+                } finally {
+                    saveEditBtn.innerText = 'Сохранить';
+                    saveEditBtn.disabled = false;
+                    saveEditBtn.classList.remove('animate-pulse');
                 }
-                if (e.key === 'Escape') closeModalBtn.click();
-            }
-            if (!deleteModal.classList.contains('hidden') && e.key === 'Escape') {
-                cancelDeleteBtn.click();
-            }
-            if (!editModal.classList.contains('hidden') && e.key === 'Escape') {
-                cancelEditBtn.click();
-            }
-            if (!duplicateModal.classList.contains('hidden') && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
-                closeDuplicateModalBtn.click();
-            }
-        });
+            });
 
-        shuffleBtn.addEventListener('click', () => {
-            practiceWords = shuffleArray(practiceWords);
-            currentCardIndex = 0;
-            updateCard();
-        });
+            // Добавление нового слова
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const eng = engInput.value.trim();
+                let trans = transInput.value.trim();
+                const ukr = ukrInput.value.trim();
 
-        loadWords();
-    </script>
-</body>
+                const isDuplicate = words.some(
+                    (w) => w.english.toLowerCase() === eng.toLowerCase(),
+                );
+                if (isDuplicate) {
+                    duplicateModal.classList.remove('hidden');
+                    duplicateModal.classList.add('flex');
+                    return;
+                }
+
+                if (trans && !trans.startsWith('[')) trans = '[' + trans;
+                if (trans && !trans.endsWith(']')) trans = trans + ']';
+                trans = trans.replace(/\[|\]/g, '');
+
+                submitBtn.innerText = '[ ПЕРЕДАЧА ДАННЫХ... ]';
+                submitBtn.disabled = true;
+                submitBtn.classList.add(
+                    'animate-pulse',
+                    'text-yellow-400',
+                    'border-yellow-400',
+                );
+
+                try {
+                    const docRef = await addDoc(collection(db, 'words'), {
+                        english: eng,
+                        transcription: trans,
+                        ukrainian: ukr,
+                        createdAt: serverTimestamp(),
+                    });
+
+                    words.unshift({
+                        id: docRef.id,
+                        english: eng,
+                        transcription: trans,
+                        ukrainian: ukr,
+                    });
+
+                    renderList(docRef.id);
+
+                    engInput.value = '';
+                    transInput.value = '';
+                    ukrInput.value = '';
+
+                    submitBtn.innerText = '[ ЗАПИСЬ УСПЕШНА ]';
+                    submitBtn.classList.remove(
+                        'animate-pulse',
+                        'text-yellow-400',
+                        'border-yellow-400',
+                    );
+                    submitBtn.classList.add(
+                        'text-green-400',
+                        'border-green-500',
+                        'shadow-[0_0_15px_rgba(34,197,94,0.5)]',
+                    );
+
+                    setTimeout(() => {
+                        submitBtn.innerText = '[ Загрузить в базу ]';
+                        submitBtn.classList.remove(
+                            'text-green-400',
+                            'border-green-500',
+                            'shadow-[0_0_15px_rgba(34,197,94,0.5)]',
+                        );
+                        submitBtn.disabled = false;
+                    }, 1500);
+                } catch (error) {
+                    console.error('Помилка збереження:', error);
+                    alert('ACCESS DENIED: Ошибка записи в БД.');
+                    submitBtn.innerText = '[ Загрузить в базу ]';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove(
+                        'animate-pulse',
+                        'text-yellow-400',
+                        'border-yellow-400',
+                    );
+                }
+            });
+
+            async function deleteWordFromDB(id) {
+                try {
+                    await deleteDoc(doc(db, 'words', id));
+                    words = words.filter((w) => w.id !== id);
+                    renderList();
+                } catch (error) {
+                    console.error('Помилка видалення:', error);
+                }
+            }
+
+            function shuffleArray(array) {
+                let curId = array.length;
+                while (0 !== curId) {
+                    let randId = Math.floor(Math.random() * curId);
+                    curId -= 1;
+                    let tmp = array[curId];
+                    array[curId] = array[randId];
+                    array[randId] = tmp;
+                }
+                return array;
+            }
+
+            practiceBtn.addEventListener('click', () => {
+                if (words.length === 0) {
+                    alert('БАЗА ПУСТА. ДОБАВЬТЕ ДАННЫЕ.');
+                    return;
+                }
+                practiceWords = shuffleArray([...words]);
+                currentCardIndex = 0;
+                updateCard();
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                flashcard.classList.remove('flipped');
+            });
+
+            flashcard.addEventListener('click', () => {
+                flashcard.classList.toggle('flipped');
+            });
+
+            function updateCard() {
+                flashcard.classList.remove('flipped');
+
+                // Запуск анимации смены карточки
+                flashcard.classList.remove('animate-card-change');
+                void flashcard.offsetWidth;
+                flashcard.classList.add('animate-card-change');
+
+                const word = practiceWords[currentCardIndex];
+
+                setTimeout(() => {
+                    cardEng.innerText = word.english;
+                    cardTrans.innerText = word.transcription
+                        ? `[${word.transcription}]`
+                        : '';
+                    cardUkr.innerText = word.ukrainian;
+                    currentNum.innerText = currentCardIndex + 1;
+                    totalNum.innerText = practiceWords.length;
+                }, 150);
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentCardIndex < practiceWords.length - 1) {
+                    currentCardIndex++;
+                    updateCard();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentCardIndex > 0) {
+                    currentCardIndex--;
+                    updateCard();
+                }
+            });
+
+            // Глобальні перехоплення клавіатури
+            document.addEventListener('keydown', (e) => {
+                // Перехоплення Ctrl+F (або Cmd+F на Mac) для фокусу на нашому пошуку
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    // Прокрутка до рядка пошуку, якщо він поза екраном
+                    searchInput.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                    });
+                }
+
+                if (!modal.classList.contains('hidden')) {
+                    if (e.key === 'ArrowRight') nextBtn.click();
+                    if (e.key === 'ArrowLeft') prevBtn.click();
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        flashcard.click();
+                    }
+                    if (e.key === 'Escape') closeModalBtn.click();
+                }
+                if (
+                    !deleteModal.classList.contains('hidden') &&
+                    e.key === 'Escape'
+                ) {
+                    cancelDeleteBtn.click();
+                }
+                if (
+                    !editModal.classList.contains('hidden') &&
+                    e.key === 'Escape'
+                ) {
+                    cancelEditBtn.click();
+                }
+                if (
+                    !duplicateModal.classList.contains('hidden') &&
+                    (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')
+                ) {
+                    closeDuplicateModalBtn.click();
+                }
+            });
+
+            shuffleBtn.addEventListener('click', () => {
+                practiceWords = shuffleArray(practiceWords);
+                currentCardIndex = 0;
+                updateCard();
+            });
+
+            loadWords();
+        </script>
+    </body>
 </html>
