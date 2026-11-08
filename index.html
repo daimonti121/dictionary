@@ -31,6 +31,70 @@
             };
         </script>
         <style>
+            /* =========================================
+           ЛОГІКА ВІДОБРАЖЕННЯ РЯДКІВ (ЗГОРНУТО/РОЗГОРНУТО)
+           ========================================= */
+
+            /* 1. За замовчуванням (в один рядок) */
+            .word-row .word-details {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                white-space: nowrap;
+                overflow: hidden;
+                gap: 0.75rem;
+                align-content: center;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .word-row .word-eng-group {
+                display: flex;
+                align-items: baseline;
+                gap: 0.5rem;
+                overflow: hidden;
+                flex-shrink: 1;
+                min-width: 0; /* Важливо для обрізки тексту в flex-контейнері */
+            }
+            .word-row .word-eng,
+            .word-row .word-trans,
+            .word-row .word-ukr {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .word-row .word-ukr {
+                flex-shrink: 1;
+                min-width: 0;
+            }
+
+            /* 2. При кліку (розгорнутий стан) */
+            .word-row.is-expanded .word-details {
+                flex-direction: column; /* Текст стає в колонку, щоб дати місце кнопкам */
+                align-items: flex-start;
+                white-space: normal;
+                gap: 0.1rem;
+            }
+            @media (min-width: 640px) {
+                /* На ПК тексту більше, тому він просто переноситься (wrap) */
+                .word-row.is-expanded .word-details {
+                    flex-direction: row;
+                    align-items: baseline;
+                    flex-wrap: wrap;
+                    gap: 0.75rem;
+                }
+            }
+            .word-row.is-expanded .word-eng-group {
+                flex-shrink: 0;
+                flex-wrap: wrap;
+            }
+            .word-row.is-expanded .word-eng,
+            .word-row.is-expanded .word-trans,
+            .word-row.is-expanded .word-ukr {
+                overflow: visible;
+                text-overflow: clip;
+                white-space: normal;
+                word-break: break-word; /* Дозволяє переносити довгі слова */
+            }
             /* АНИМИРОВАННЫЙ ОСНОВНОЙ ФОН С СИНИМ СВЕЧЕНИЕМ */
             body {
                 background-color: #020b1a;
@@ -1024,23 +1088,26 @@
                     const li = document.createElement('li');
 
                     li.id = `word-item-${word.id}`;
-                    li.className = `flex items-center justify-between bg-[#020b1a] bg-opacity-80 p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden ${isNew ? 'animate-new-word' : ''}`;
+                    // Додано клас word-row для нашої нової CSS логіки
+                    li.className = `word-row flex items-center justify-between bg-[#020b1a] bg-opacity-80 p-3 border-l-2 border-cyan-700 hover:border-cyan-400 transition-colors group overflow-hidden cursor-pointer ${isNew ? 'animate-new-word' : ''}`;
 
+                    // Зверни увагу: класи тут спрощені, бо керування макетом тепер бере на себе CSS вище
                     const transcriptionHtml = word.transcription
-                        ? `<span class="text-cyan-600 font-mono text-sm ml-2 group-hover:text-cyan-400 transition-colors">[${word.transcription}]</span>`
+                        ? `<span class="word-trans text-cyan-600 font-mono text-sm group-hover:text-cyan-400 transition-colors">[${word.transcription}]</span>`
                         : '';
 
-                    // Оновлена структура HTML для перенесення кнопок вправо
                     li.innerHTML = `
-                    <div class="flex items-center justify-between w-full">
-                        <div class="flex-grow flex flex-col md:flex-row md:items-baseline gap-1">
-                            <div>
-                                <span class="font-bold text-lg text-cyan-200 group-hover:text-white transition-colors">${word.english}</span>
+                    <div class="flex items-center justify-between w-full overflow-hidden">
+                        
+                        <div class="word-details flex-grow select-none pr-2">
+                            <div class="word-eng-group">
+                                <span class="word-eng font-bold text-lg text-cyan-200 group-hover:text-white transition-colors">${word.english}</span>
                                 ${transcriptionHtml}
                             </div>
-                            <div class="text-cyan-500 uppercase text-sm md:ml-4">${word.ukrainian}</div>
+                            <div class="word-ukr text-cyan-500 uppercase text-sm">${word.ukrainian}</div>
                         </div>
-                        <div class="flex flex-shrink-0 ml-3">
+                        
+                        <div class="action-btns hidden flex-shrink-0 ml-1 pl-2 border-l border-cyan-800">
                             <button class="edit-btn text-cyan-800 hover:text-yellow-500 p-2 transition-colors" data-id="${word.id}" title="Редактировать">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -1054,10 +1121,55 @@
                         </div>
                     </div>
                 `;
+
+                    // Обробник кліку для розгортання рядка
+                    li.addEventListener('click', (e) => {
+                        // Якщо клік був по самій кнопці - нічого не згортаємо, даємо відпрацювати вікну
+                        if (e.target.closest('button')) return;
+
+                        const btns = li.querySelector('.action-btns');
+                        const isHidden = btns.classList.contains('hidden');
+
+                        // 1. Спочатку ховаємо всі відкриті рядки
+                        document
+                            .querySelectorAll('.action-btns')
+                            .forEach((el) => {
+                                el.classList.add('hidden');
+                                el.classList.remove('flex');
+
+                                const pLi = el.closest('li');
+                                pLi.classList.remove('is-expanded'); // Знімаємо клас розгортання
+                                pLi.classList.replace(
+                                    'bg-[#082f49]',
+                                    'bg-[#020b1a]',
+                                );
+                                pLi.classList.replace(
+                                    'border-cyan-400',
+                                    'border-cyan-700',
+                                );
+                            });
+
+                        // 2. Якщо рядок, по якому клікнули, був закритий — відкриваємо його
+                        if (isHidden) {
+                            btns.classList.remove('hidden');
+                            btns.classList.add('flex');
+
+                            li.classList.add('is-expanded'); // Додаємо клас розгортання тексту
+                            li.classList.replace(
+                                'bg-[#020b1a]',
+                                'bg-[#082f49]',
+                            );
+                            li.classList.replace(
+                                'border-cyan-700',
+                                'border-cyan-400',
+                            );
+                        }
+                    });
+
                     wordList.appendChild(li);
                 });
 
-                // Обработчики для удаления
+                // Обробники кнопок видалення
                 document.querySelectorAll('.delete-btn').forEach((btn) => {
                     btn.addEventListener('click', (e) => {
                         const btnElement = e.target.closest('.delete-btn');
@@ -1067,7 +1179,7 @@
                     });
                 });
 
-                // Обработчики для редактирования
+                // Обробники кнопок редагування
                 document.querySelectorAll('.edit-btn').forEach((btn) => {
                     btn.addEventListener('click', (e) => {
                         const btnElement = e.target.closest('.edit-btn');
@@ -1087,7 +1199,7 @@
                     });
                 });
 
-                // Якщо є текст у пошуку - застосовуємо його до нового списку
+                // Застосування пошуку
                 if (searchInput.value.trim() !== '') {
                     searchInput.dispatchEvent(new Event('input'));
                 }
