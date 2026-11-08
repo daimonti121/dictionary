@@ -71,6 +71,15 @@
         .card-inner { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .flipped .card-inner { transform: rotateY(180deg); }
 
+        /* Анимация перелистывания карточек */
+        @keyframes card-shift {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); filter: blur(4px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
+        .animate-card-change {
+            animation: card-shift 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #020b1a; border-left: 1px solid #082f49; }
         ::-webkit-scrollbar-thumb { background: #06b6d4; }
@@ -170,13 +179,6 @@
             animation: cyber-delete 0.4s ease-out forwards;
             pointer-events: none; 
         }
-        @keyframes card-shift {
-            0% { opacity: 0; transform: scale(0.95) translateY(10px); filter: blur(4px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-        }
-        .animate-card-change {
-            animation: card-shift 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
     </style>
 </head>
 <body class="font-cyber text-cyan-400 min-h-screen flex flex-col items-center p-4 relative">
@@ -243,7 +245,7 @@
                 <input type="text" id="trans-input" placeholder="PHONETICS (optional)"
                     class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
-                <input type="text" id="ukr-input" placeholder="RU_DATA (e.g. Уязвимость)" required
+                <input type="text" id="ukr-input" placeholder="RU_DATA (e.g. Уразливість)" required
                     class="p-3 bg-black border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-400 neon-border transition-colors">
                 
                 <button type="submit" id="submit-btn"
@@ -266,6 +268,18 @@
                 <div class="text-sm text-cyan-600">RECORDS: <span id="word-count" class="text-cyan-300">0</span></div>
             </div>
             
+            <!-- Пошук по базі (Додано) -->
+            <div class="mb-4 relative group">
+                <div class="absolute top-0 left-0 w-1 h-1 bg-cyan-500 z-10"></div>
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-cyan-600 group-focus-within:text-cyan-400 transition-colors" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" id="search-input" placeholder="SEARCH_QUERY... [ Ctrl + F ]" 
+                    class="w-full p-2 pl-10 bg-[#010612] border border-cyan-900 rounded-none text-cyan-200 placeholder-cyan-800 focus:outline-none focus:border-cyan-500 neon-border transition-colors font-mono text-sm relative">
+            </div>
+
             <div id="loading-msg" class="text-cyan-600 animate-pulse">Установка соединения с сервером...</div>
             
             <ul id="word-list" class="flex flex-col gap-2 overflow-hidden">
@@ -445,6 +459,9 @@
         const duplicateModal = document.getElementById('duplicate-modal');
         const closeDuplicateModalBtn = document.getElementById('close-duplicate-modal');
 
+        // Пошук
+        const searchInput = document.getElementById('search-input');
+
         async function loadWords() {
             words = [];
             try {
@@ -499,7 +516,6 @@
                 wordList.appendChild(li);
             });
 
-            // Вызов модального окна подтверждения удаления при клике на корзинку
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const btnElement = e.target.closest('.delete-btn');
@@ -508,16 +524,35 @@
                     deleteModal.classList.add('flex');
                 });
             });
+
+            // Якщо є текст у пошуку - застосовуємо його до нового списку
+            if (searchInput.value.trim() !== '') {
+                searchInput.dispatchEvent(new Event('input'));
+            }
         }
 
-        // Кнопка "Отмена" в модалке удаления
+        // Обробник пошуку
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const listItems = wordList.querySelectorAll('li');
+            
+            listItems.forEach(li => {
+                const text = li.innerText.toLowerCase();
+                // Шукаємо співпадіння. Якщо є - показуємо flex, інакше - ховаємо none
+                if (text.includes(query)) {
+                    li.style.display = 'flex';
+                } else {
+                    li.style.display = 'none';
+                }
+            });
+        });
+
         cancelDeleteBtn.addEventListener('click', () => {
             wordToDeleteId = null;
             deleteModal.classList.add('hidden');
             deleteModal.classList.remove('flex');
         });
 
-        // Кнопка "Удалить" в модалке удаления
         confirmDeleteBtn.addEventListener('click', async () => {
             if (!wordToDeleteId) return;
 
@@ -535,7 +570,6 @@
             }, 400);
         });
 
-        // Закрытие модалки дубликатов
         closeDuplicateModalBtn.addEventListener('click', () => {
             duplicateModal.classList.add('hidden');
             duplicateModal.classList.remove('flex');
@@ -547,7 +581,6 @@
             let trans = transInput.value.trim();
             const ukr = ukrInput.value.trim();
 
-            // Проверка на дубликаты (без учета регистра)
             const isDuplicate = words.some(w => w.english.toLowerCase() === eng.toLowerCase());
             if (isDuplicate) {
                 duplicateModal.classList.remove('hidden');
@@ -675,7 +708,16 @@
             }
         });
 
+        // Глобальні перехоплення клавіатури
         document.addEventListener('keydown', (e) => {
+            // Перехоплення Ctrl+F (або Cmd+F на Mac) для фокусу на нашому пошуку
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+                e.preventDefault(); 
+                searchInput.focus();
+                // Прокрутка до рядка пошуку, якщо він поза екраном
+                searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
             if (!modal.classList.contains('hidden')) {
                 if (e.key === 'ArrowRight') nextBtn.click();
                 if (e.key === 'ArrowLeft') prevBtn.click();
@@ -685,11 +727,9 @@
                 }
                 if (e.key === 'Escape') closeModalBtn.click();
             }
-            // Закрытие модалки удаления по Escape
             if (!deleteModal.classList.contains('hidden') && e.key === 'Escape') {
                 cancelDeleteBtn.click();
             }
-            // Закрытие модалки дубликатов по Escape или Enter/Space
             if (!duplicateModal.classList.contains('hidden') && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
                 closeDuplicateModalBtn.click();
             }
